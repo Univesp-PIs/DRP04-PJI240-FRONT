@@ -26,6 +26,10 @@
         {
           "type": "route",
           "uuid": "c3f482d6-e37c-4ce3-894b-21ec406c07ba"
+        },
+        {
+          "type": "route",
+          "uuid": "82ab1e60-76ed-4505-a652-b7896f83d012"
         }
       ]
     },
@@ -36,10 +40,6 @@
         {
           "type": "route",
           "uuid": "70410b66-c6b5-41cf-9dfe-c8492548b4df"
-        },
-        {
-          "type": "route",
-          "uuid": "fab98e28-b81a-47a3-8fbe-a32acac6cc9d"
         }
       ]
     }
@@ -48,7 +48,7 @@
     {
       "uuid": "a68d1dfe-37ad-4750-805c-474b7369fc9a",
       "type": "http",
-      "documentation": "Project status ",
+      "documentation": "Status do projeto pesquisado",
       "method": "get",
       "endpoint": ":id",
       "responses": [
@@ -67,13 +67,13 @@
           "rulesOperator": "OR",
           "disableTemplating": false,
           "fallbackTo404": false,
-          "default": true,
+          "default": false,
           "crudKey": "id",
           "callbacks": []
         },
         {
           "uuid": "bf7f9af6-2406-4658-b4a4-3eb708201a52",
-          "body": "{\n  \"message\": \"Project not found. Verifique se a chave de acesso está correta\"\n}",
+          "body": "{\n  \"message\": \"Projeto não encontrado.\\nVerifique se a chave de acesso está correta\"\n}",
           "latency": 0,
           "statusCode": 404,
           "label": "",
@@ -86,7 +86,7 @@
           "rulesOperator": "OR",
           "disableTemplating": false,
           "fallbackTo404": false,
-          "default": false,
+          "default": true,
           "crudKey": "id",
           "callbacks": []
         }
@@ -227,7 +227,7 @@
       "responses": [
         {
           "uuid": "df32bdc5-c73b-4998-b5d4-14fe3d97eb17",
-          "body": "[\n  {\n    \"id\": \"1\",\n    \"name\": \"Compra do equipamento\"\n  },\n  {\n    \"id\": \"2\",\n    \"name\": \"Homologação do projeto\"\n  },\n  {\n    \"id\": \"3\",\n    \"name\": \"Recebimento do equipamento\"\n  },\n  {\n    \"id\": \"4\",\n    \"name\": \"Instalação\"\n  },\n  {\n    \"id\": \"5\",\n    \"name\": \"Vistoria e troca do medidor\"\n  },\n  {\n    \"id\": \"6\",\n    \"name\": \"Configuração e monitoramento\"\n  },\n  {\n    \"id\": \"7\",\n    \"name\": \"Entrega dos documentos\"\n  },\n]",
+          "body": "[\n  {\n    \"id\": \"1\",\n    \"name\": \"Compra do equipamento\",\n    \"is_enabled\": true\n  },\n  {\n    \"id\": \"2\",\n    \"name\": \"Homologação do projeto\",\n    \"is_enabled\": true\n  },\n  {\n    \"id\": \"3\",\n    \"name\": \"Recebimento do equipamento\",\n    \"is_enabled\": true\n  },\n  {\n    \"id\": \"4\",\n    \"name\": \"Instalação\",\n    \"is_enabled\": true\n  },\n  {\n    \"id\": \"5\",\n    \"name\": \"Vistoria e troca do medidor\",\n    \"is_enabled\": true\n  },\n  {\n    \"id\": \"6\",\n    \"name\": \"Configuração e monitoramento\",\n    \"is_enabled\": true\n  },\n  {\n    \"id\": \"7\",\n    \"name\": \"Entrega dos documentos\",\n    \"is_enabled\": true\n  },\n]",
           "latency": 0,
           "statusCode": 200,
           "label": "",
@@ -250,7 +250,7 @@
     {
       "uuid": "b7ee1682-a88d-4c13-8c0d-fafb906391f6",
       "type": "http",
-      "documentation": "Update project",
+      "documentation": "[InProgress] Update project",
       "method": "put",
       "endpoint": "project/:project_id",
       "responses": [
@@ -306,18 +306,18 @@
       "responseMode": null
     },
     {
-      "uuid": "fab98e28-b81a-47a3-8fbe-a32acac6cc9d",
+      "uuid": "82ab1e60-76ed-4505-a652-b7896f83d012",
       "type": "http",
-      "documentation": "Edit project status",
-      "method": "put",
-      "endpoint": "status/:id",
+      "documentation": "List all projects",
+      "method": "get",
+      "endpoint": "project/:id",
       "responses": [
         {
-          "uuid": "ff912ee5-ec4d-46c3-a9f8-1201479f0379",
-          "body": "{}",
+          "uuid": "27f2f304-c155-4b8f-9b47-00db81fd2590",
+          "body": "  {\n    \"name\": \"projeto-4321\",\n    \"current_status\": {\n      \"id\": \"1\",\n      \"name\": \"Compra do equipamento\"\n    },\n    \"email\": \"email@exemplo.com\",\n    \"access_key\": \"12345\",\n    \"timelime\": [\n        {\n            \"id\": \"7\",\n            \"rank\": 0,\n            \"name\": \"Entrega dos documentos\"\n        },\n        {\n            \"id\": \"1\",\n            \"rank\": 1,\n            \"name\": \"Compra do equipamento\"\n        },\n        {\n            \"id\": \"2\",\n            \"rank\": 2,\n            \"name\": \"Homologação do projeto\"\n        },\n        {\n            \"id\": \"3\",\n            \"rank\": 3,\n            \"name\": \"Recebimento do equipamento\"\n        },\n        {\n            \"id\": \"4\",\n            \"rank\": 4,\n            \"name\": \"Instalação\"\n        },\n        {\n            \"id\": \"5\",\n            \"rank\": 5,\n            \"name\": \"Vistoria e troca do medidor\"\n        },\n        {\n            \"id\": \"6\",\n            \"rank\": 6,\n            \"name\": \"Configuração e monitoramento\"\n        }\n    ]\n  }",
           "latency": 0,
-          "statusCode": 204,
-          "label": "",
+          "statusCode": 200,
+          "label": "Fill",
           "headers": [],
           "bodyType": "INLINE",
           "filePath": "",
@@ -328,6 +328,44 @@
           "disableTemplating": false,
           "fallbackTo404": false,
           "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "e5ac7d51-b2ac-4a32-9e5d-bdab02d8e2e7",
+          "body": "[\n]",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Empty",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "58f0209f-ef68-441f-9a25-20b8884c21b5",
+          "body": "{\n  \"message\": \"Você não tem autorização para acessar este recurso\"\n}",
+          "latency": 0,
+          "statusCode": 401,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
           "crudKey": "id",
           "callbacks": []
         }

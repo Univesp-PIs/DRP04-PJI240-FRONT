@@ -40,6 +40,14 @@
         {
           "type": "route",
           "uuid": "70410b66-c6b5-41cf-9dfe-c8492548b4df"
+        },
+        {
+          "type": "route",
+          "uuid": "ce928847-ca5c-415b-8d87-5ecb497e9fe5"
+        },
+        {
+          "type": "route",
+          "uuid": "450d57dd-e4dc-41eb-9def-7026c2ca996c"
         }
       ]
     }
@@ -131,7 +139,7 @@
       "responses": [
         {
           "uuid": "a5b163f4-1ffc-42e2-8ff2-1f5c065a0069",
-          "body": "[\n  {\n    \"name\": \"projeto-1234\",\n    \"current_status\": {\n      \"id\": \"2\",\n      \"name\": \"Homologação\"\n    },\n    \"email\": \"email@exemplo.com\",\n    \"access_key\": \"12345\",\n  },\n  {\n    \"name\": \"projeto-4321\",\n    \"current_status\": {\n      \"id\": \"1\",\n      \"name\": \"Compra do equipamento\"\n    },\n    \"email\": \"email@exemplo.com\",\n    \"access_key\": \"12345\",\n  }\n]",
+          "body": "[\n  {\n    \"name\": \"projeto-1234\",\n    \"id\": \"1234\",\n    \"current_status\": {\n      \"id\": \"2\",\n      \"name\": \"Homologação\"\n    },\n    \"email\": \"email@exemplo.com\",\n    \"access_key\": \"12345\",\n  },\n  {\n    \"name\": \"projeto-4321\",\n    \"id\": \"4321\",\n    \"current_status\": {\n      \"id\": \"1\",\n      \"name\": \"Compra do equipamento\"\n    },\n    \"email\": \"email@exemplo.com\",\n    \"access_key\": \"12345\",\n  }\n]",
           "latency": 0,
           "statusCode": 200,
           "label": "Fill",
@@ -256,7 +264,7 @@
       "responses": [
         {
           "uuid": "784046df-7c57-4bd4-a541-5707c731dcc1",
-          "body": "",
+          "body": "{\n  \"message\": \"Projeto editado com sucesso\"\n}",
           "latency": 0,
           "statusCode": 200,
           "label": "",
@@ -314,7 +322,7 @@
       "responses": [
         {
           "uuid": "27f2f304-c155-4b8f-9b47-00db81fd2590",
-          "body": "  {\n    \"name\": \"projeto-4321\",\n    \"current_status\": {\n      \"id\": \"1\",\n      \"name\": \"Compra do equipamento\"\n    },\n    \"email\": \"email@exemplo.com\",\n    \"access_key\": \"12345\",\n    \"timelime\": [\n        {\n            \"id\": \"7\",\n            \"rank\": 0,\n            \"name\": \"Entrega dos documentos\"\n        },\n        {\n            \"id\": \"1\",\n            \"rank\": 1,\n            \"name\": \"Compra do equipamento\"\n        },\n        {\n            \"id\": \"2\",\n            \"rank\": 2,\n            \"name\": \"Homologação do projeto\"\n        },\n        {\n            \"id\": \"3\",\n            \"rank\": 3,\n            \"name\": \"Recebimento do equipamento\"\n        },\n        {\n            \"id\": \"4\",\n            \"rank\": 4,\n            \"name\": \"Instalação\"\n        },\n        {\n            \"id\": \"5\",\n            \"rank\": 5,\n            \"name\": \"Vistoria e troca do medidor\"\n        },\n        {\n            \"id\": \"6\",\n            \"rank\": 6,\n            \"name\": \"Configuração e monitoramento\"\n        }\n    ]\n  }",
+          "body": "{\n    \"email\": \"email do usuario\",\n    \"current_status_id\": \"1\",\n    \"project_name\": \"Projeto-1234\",\n    \"timelime\": [\n        {\n            \"id\": \"7\",\n            \"rank\": 0,\n            \"name\": \"Entrega dos documentos\",\n            \"last_update\": \"12/02/2024\",\n            \"status\": \"done\"\n        },\n        {\n            \"id\": \"1\",\n            \"rank\": 1,\n            \"name\": \"Compra do equipamento\",\n            \"last_update\": \"13/02/2024\",\n            \"status\": \"in progress\"\n        },\n        {\n            \"id\": \"2\",\n            \"rank\": 2,\n            \"name\": \"Homologação do projeto\",\n            \"last_update\": null,\n            \"status\": \"waiting\"\n        },\n        {\n            \"id\": \"3\",\n            \"rank\": 3,\n            \"name\": \"Recebimento do equipamento\",\n            \"last_update\": null,\n            \"status\": \"waiting\"\n        },\n        {\n            \"id\": \"4\",\n            \"rank\": 4,\n            \"name\": \"Instalação\",\n            \"last_update\": null,\n            \"status\": \"waiting\"\n        },\n        {\n            \"id\": \"5\",\n            \"rank\": 5,\n            \"name\": \"Vistoria e troca do medidor\",\n            \"last_update\": null,\n            \"status\": \"waiting\"\n        },\n        {\n            \"id\": \"6\",\n            \"rank\": 6,\n            \"name\": \"Configuração e monitoramento\",\n            \"last_update\": null,\n            \"status\": \"waiting\"\n        }\n    ]\n}",
           "latency": 0,
           "statusCode": 200,
           "label": "Fill",
@@ -366,6 +374,64 @@
           "disableTemplating": false,
           "fallbackTo404": false,
           "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    },
+    {
+      "uuid": "ce928847-ca5c-415b-8d87-5ecb497e9fe5",
+      "type": "http",
+      "documentation": "Create status",
+      "method": "post",
+      "endpoint": "status",
+      "responses": [
+        {
+          "uuid": "b6f02876-eef2-47db-9f38-66b64b405c62",
+          "body": "",
+          "latency": 0,
+          "statusCode": 201,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    },
+    {
+      "uuid": "450d57dd-e4dc-41eb-9def-7026c2ca996c",
+      "type": "http",
+      "documentation": "Update status",
+      "method": "put",
+      "endpoint": "status",
+      "responses": [
+        {
+          "uuid": "375210fb-3395-4c0b-ba84-aa5fcebbcf2d",
+          "body": "{\n  \"message\": \"Status editados com sucesso\"\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
           "crudKey": "id",
           "callbacks": []
         }

@@ -1,4 +1,4 @@
 {
-    "email": "email do usuario",
-    "senha": "senha do usuario"
+    "user": "email do usuario",
+    "password": "senha do usuario"
 }

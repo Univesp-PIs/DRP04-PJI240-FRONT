@@ -31,13 +31,22 @@ export function Footer() {
           </Link>
         </div>
         <div className="flex items-center gap-3">
-          <Link href={email.link} className="hover:text-white duration-300">
+          <Link
+            href={email.link}
+            className="text-white hover:text-primary duration-300"
+          >
             <FaEnvelope size={35} />
           </Link>
-          <Link href={whatsapp.link} className="hover:text-white duration-300">
+          <Link
+            href={whatsapp.link}
+            className="text-white hover:text-primary duration-300"
+          >
             <FaWhatsapp size={35} />
           </Link>
-          <Link href={address.link} className="hover:text-white duration-300">
+          <Link
+            href={address.link}
+            className="text-white hover:text-primary duration-300"
+          >
             <FaMapMarkerAlt size={35} />
           </Link>
         </div>

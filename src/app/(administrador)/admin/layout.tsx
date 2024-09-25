@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Header } from '@/components/Header'
+import { AdminContextProvider } from '@/contexts/AdminContext'
 
 export const metadata: Metadata = {
   title: 'EngSol - Admin',
@@ -12,9 +13,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <>
+    <AdminContextProvider>
       <Header />
       {children}
-    </>
+    </AdminContextProvider>
   )
 }

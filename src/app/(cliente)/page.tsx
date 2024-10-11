@@ -11,10 +11,10 @@ export default function Home() {
   }
 
   return (
-    <div className="w-full flex justify-center items-center min-h-[calc(100vh-203.83px)] lg:min-h-[calc(100vh-227.83px)]">
+    <main className="w-full flex justify-center items-center min-h-[calc(100vh-203.83px)] lg:min-h-[calc(100vh-227.83px)]">
       <div className="w-full max-w-screen-xl flex flex-col items-center gap-12 px-4 xl:px-0">
         <h3 className="w-full md:w-[60%] bg-primary text-secondary font-medium text-xl p-2 text-center rounded-md">
-          Consulte seu pedido
+          Consulte o seu pedido
         </h3>
         <form className="flex flex-col items-center gap-8">
           <h4 className="text-lg">Chave de acesso</h4>
@@ -32,6 +32,6 @@ export default function Home() {
           </button>
         </form>
       </div>
-    </div>
+    </main>
   )
 }

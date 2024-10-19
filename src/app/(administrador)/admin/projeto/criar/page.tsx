@@ -157,8 +157,8 @@ const DraggableItemComponent: FC<DraggableProps> = ({
           />
           <RxDragHandleHorizontal
             size={30}
-            className={`cursor-pointer hover:scale-105 duration-300 cursor-${
-              isDragging ? 'grabbing' : 'grab'
+            className={`hover:scale-105 duration-300 ${
+              isDragging ? 'cursor-grabbing' : 'cursor-grab'
             }`}
           />
         </div>

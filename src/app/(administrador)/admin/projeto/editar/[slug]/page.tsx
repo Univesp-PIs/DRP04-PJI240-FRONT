@@ -18,6 +18,8 @@ import { AdminContext } from '@/contexts/AdminContext'
 import { Button } from '@/components/Button'
 import { RxDragHandleHorizontal } from 'react-icons/rx'
 import { format } from 'date-fns'
+import { useRouter } from 'next/navigation'
+import { ModalGeneric } from '@/components/Modal'
 
 interface Step {
   id: number
@@ -236,6 +238,7 @@ export default function EditarProjeto() {
   //   params: { slug: string }
   // }
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const router = useRouter()
 
   const { setTitleHeader } = useContext(AdminContext)
   const [apiData, setApiData] = useState(mockApi)
@@ -390,13 +393,29 @@ export default function EditarProjeto() {
             </ul>
 
             <div className="flex gap-4">
-              <Button variant="secondary">Voltar</Button>
-              <Button variant="primary" isLoading={isSubmitting}>
-                Salvar
-              </Button>
-              <Button variant="error" isLoading={isSubmitting}>
-                Excluir
-              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => router.push('/admin/dashboard')}
+                title="Voltar"
+              />
+              <Button
+                variant="primary"
+                isLoading={isSubmitting}
+                title="Salvar"
+              />
+
+              <ModalGeneric
+                button={
+                  <Button
+                    variant="error"
+                    isLoading={isSubmitting}
+                    title="Excluir"
+                  />
+                }
+                title="Excluir projeto"
+                description="Deseja realmente excluir este projeto?"
+                onConfirm={() => console.log('Excluir')}
+              />
             </div>
           </form>
         </div>

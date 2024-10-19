@@ -367,10 +367,12 @@ export default function CriarProjeto() {
             </ul>
 
             <div className="flex gap-4">
-              <Button variant="secondary">Voltar</Button>
-              <Button variant="primary" isLoading={isSubmitting}>
-                Criar projeto
-              </Button>
+              <Button variant="secondary" title="Voltar" />
+              <Button
+                variant="primary"
+                title="Criar projeto"
+                isLoading={isSubmitting}
+              />
             </div>
           </form>
         </div>

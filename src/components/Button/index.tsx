@@ -1,20 +1,23 @@
-import { ButtonHTMLAttributes, ReactNode } from 'react'
+import { ButtonHTMLAttributes } from 'react'
 import { BiLoaderAlt } from 'react-icons/bi'
 
 interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'error' | 'success'
   isLoading?: boolean
-  children: ReactNode
+  widthFull?: boolean
+  title: string
 }
 
 export function Button({
   variant = 'secondary',
   isLoading = false,
-  children,
+  title,
+  widthFull,
   ...props
 }: IButtonProps) {
   const classBase = 'px-4 py-2 rounded-md font-bold duration-100'
   const classPrimary = 'bg-secondary text-white hover:bg-green-500'
+  const classSuccess = 'bg-green-500 text-white hover:bg-green-700'
   const classError = 'bg-red-500 text-white hover:bg-red-700'
   const classSecondary =
     'border bg-transparent hover:bg-red-500 hover:text-white'
@@ -22,12 +25,17 @@ export function Button({
   return (
     <button
       className={`${classBase} ${
-        variant === 'primary' || isLoading
+        variant === 'primary'
           ? classPrimary
           : variant === 'error'
             ? classError
-            : classSecondary
-      }`}
+            : variant === 'success'
+              ? classSuccess
+              : classSecondary && classSecondary
+      } ${
+        isLoading ? 'cursor-not-allowed' : 'cursor-pointer'
+      } ${props.className}
+      ${widthFull && 'w-full'}`}
       {...props}
     >
       {isLoading ? (
@@ -36,7 +44,7 @@ export function Button({
           size={25}
         />
       ) : (
-        children
+        title
       )}
     </button>
   )

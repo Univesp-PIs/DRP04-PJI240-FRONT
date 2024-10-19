@@ -6,7 +6,13 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { AiOutlinePlusCircle } from 'react-icons/ai'
 import { CgCloseO } from 'react-icons/cg'
 import { z } from 'zod'
-import { useForm, UseFormRegister } from 'react-hook-form'
+import {
+  FieldError,
+  FieldErrorsImpl,
+  Merge,
+  useForm,
+  UseFormRegister,
+} from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AdminContext } from '@/contexts/AdminContext'
 import { Button } from '@/components/Button'
@@ -34,8 +40,8 @@ const schema = z.object({
   steps: z.array(
     z.object({
       step: z.string().min(3, 'Selecione uma etapa'),
-      status: z.string(),
-      data: z.string(),
+      status: z.string().min(3, 'Selecione um status'),
+      data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Digite uma data válida'),
       description: z.string().optional(),
     }),
   ),
@@ -49,7 +55,15 @@ interface DraggableProps {
   moveCharacter: (dragIndex: number, hoverIndex: number) => void
   removeStep: (index: number) => void
   register: UseFormRegister<schemaProps>
-  error?: string
+  error?: Merge<
+    FieldError,
+    FieldErrorsImpl<{
+      step: string
+      status: string
+      data: string
+      description: string
+    }>
+  >
 }
 
 const DraggableItemComponent: FC<DraggableProps> = ({
@@ -84,10 +98,10 @@ const DraggableItemComponent: FC<DraggableProps> = ({
   return (
     <li
       ref={ref} // Usa o ref corretamente tipado
-      className="flex flex-col items-center gap-4"
+      className="flex flex-row md:flex-col items-start md:items-center gap-4"
       style={{ opacity: isDragging ? 0.5 : 1 }}
     >
-      <div className="flex-col gap-6 justify-normal h-full w-fit flex lg:hidden text-black">
+      <div className="flex-col gap-8 justify-normal h-full w-fit flex lg:hidden text-black">
         <h3 className="text-xl font-bold">Etapa</h3>
         <h3 className="text-xl font-bold">Status</h3>
         <h3 className="text-xl font-bold">Data</h3>
@@ -112,6 +126,13 @@ const DraggableItemComponent: FC<DraggableProps> = ({
             Entrega dos documentos
           </option>
         </select>
+
+        {error?.step && (
+          <p className="text-red-500 text-center lg:text-left font-medium text-sm">
+            {error.step.message}
+          </p>
+        )}
+
         <select
           className="p-2 border border-gray-300 rounded-md font-bold outline-none"
           {...register(`steps.${step.id}.status`)} // define o valor padrão
@@ -120,27 +141,37 @@ const DraggableItemComponent: FC<DraggableProps> = ({
           <option value="" className="font-bold" disabled selected>
             Selecione uma opção
           </option>
-          <option value="Completo" className="font-bold">
-            Completo
-          </option>
-          <option value="Em progresso" className="font-bold">
-            Em progresso
-          </option>
-          <option value="Aguardando" className="font-bold">
+          <option value="waiting" className="font-bold">
             Aguardando
           </option>
+          <option value="in progress" className="font-bold">
+            Em progresso
+          </option>
+          <option value="done" className="font-bold">
+            Feita
+          </option>
         </select>
-        {error && (
+
+        {error?.status && (
           <p className="text-red-500 text-center lg:text-left font-medium text-sm">
-            {error}
+            {error.status.message}
           </p>
         )}
+
         <input
           type="date"
-          {...register(`steps.${step.id}.data`)} // valor padrão
-          defaultValue={step.data}
           className="p-2 border border-gray-300 rounded-md font-bold outline-none w-full"
+          {...register(`steps.${step.id}.data`, {
+            value: step.data || format(new Date(), 'yyyy-MM-dd'),
+          })} // valor padrão
+          defaultValue={step.data}
         />
+        {error?.data && (
+          <p className="text-red-500 text-center lg:text-left font-medium text-sm">
+            {error.data.message}
+          </p>
+        )}
+
         <textarea
           placeholder="Descrição"
           rows={4}
@@ -175,8 +206,7 @@ export default function CriarProjeto() {
 
   useEffect(() => {
     setTitleHeader('Criar projeto')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [setTitleHeader])
 
   const [steps, setSteps] = useState<Step[]>([
     {
@@ -184,7 +214,7 @@ export default function CriarProjeto() {
       name: 'Entrega dos documentos',
       rank: 1,
       data: dateNow,
-      status: 'Em progresso',
+      status: 'in progress',
       description: '',
     },
     {
@@ -192,7 +222,7 @@ export default function CriarProjeto() {
       name: 'Compra do equipamento',
       rank: 2,
       data: dateNow,
-      status: 'Em progresso',
+      status: 'in progress',
       description: '',
     },
     {
@@ -200,7 +230,7 @@ export default function CriarProjeto() {
       name: 'Homologação',
       rank: 3,
       data: dateNow,
-      status: 'Em progresso',
+      status: 'in progress',
       description: '',
     },
   ])
@@ -215,14 +245,11 @@ export default function CriarProjeto() {
   const {
     register,
     handleSubmit,
-    getValues,
     // reset,
     formState: { errors },
   } = useForm<schemaProps>({
     resolver: zodResolver(schema),
   })
-
-  console.log('steps', getValues('steps'))
 
   function handleSubmitContact(data: schemaProps) {
     setIsSubmitting(true)
@@ -324,7 +351,7 @@ export default function CriarProjeto() {
               {steps.map((step, index) => (
                 <DraggableItemComponent
                   key={step.id}
-                  error={errors.steps?.[step.id]?.step?.message}
+                  error={errors.steps?.[step.id]}
                   step={step}
                   index={index}
                   moveCharacter={moveCharacter}

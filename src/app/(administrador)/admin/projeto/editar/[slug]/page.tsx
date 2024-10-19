@@ -6,11 +6,18 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { AiOutlinePlusCircle } from 'react-icons/ai'
 import { CgCloseO } from 'react-icons/cg'
 import { z } from 'zod'
-import { useForm, UseFormRegister } from 'react-hook-form'
+import {
+  FieldError,
+  FieldErrorsImpl,
+  Merge,
+  useForm,
+  UseFormRegister,
+} from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AdminContext } from '@/contexts/AdminContext'
 import { Button } from '@/components/Button'
 import { RxDragHandleHorizontal } from 'react-icons/rx'
+import { format } from 'date-fns'
 
 interface Step {
   id: number
@@ -27,14 +34,45 @@ interface DraggableItem {
   type: string
 }
 
+const mockApi = {
+  email: 'teste@teste.com.br',
+  project_name: 'Projeto-1234',
+  timelime: [
+    {
+      id: 0,
+      name: 'Entrega dos documentos',
+      rank: 1,
+      data: format(new Date(), 'yyyy-MM-dd'),
+      status: 'waiting',
+      description: 'descrição teste',
+    },
+    {
+      id: 1,
+      name: 'Compra do equipamento',
+      rank: 2,
+      data: format(new Date(), 'yyyy-MM-dd'),
+      status: 'waiting',
+      description: '',
+    },
+    {
+      id: 2,
+      name: 'Homologação',
+      rank: 3,
+      data: format(new Date(), 'yyyy-MM-dd'),
+      status: 'waiting',
+      description: '',
+    },
+  ],
+}
+
 const schema = z.object({
   nameProject: z.string().min(3, 'Digite seu nome'),
   email: z.string().email('Digite um e-mail válido'),
   steps: z.array(
     z.object({
       step: z.string().min(3, 'Selecione uma etapa'),
-      status: z.string(),
-      data: z.string(),
+      status: z.string().min(3, 'Selecione um status'),
+      data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Digite uma data válida'),
       description: z.string().optional(),
     }),
   ),
@@ -48,7 +86,15 @@ interface DraggableProps {
   moveCharacter: (dragIndex: number, hoverIndex: number) => void
   removeStep: (index: number) => void
   register: UseFormRegister<schemaProps>
-  error?: string
+  error?: Merge<
+    FieldError,
+    FieldErrorsImpl<{
+      step: string
+      status: string
+      data: string
+      description: string
+    }>
+  >
 }
 
 const DraggableItemComponent: FC<DraggableProps> = ({
@@ -83,10 +129,10 @@ const DraggableItemComponent: FC<DraggableProps> = ({
   return (
     <li
       ref={ref} // Usa o ref corretamente tipado
-      className="flex flex-col items-center gap-4"
+      className="flex flex-row md:flex-col items-start md:items-center gap-4"
       style={{ opacity: isDragging ? 0.5 : 1 }}
     >
-      <div className="flex-col gap-6 justify-normal h-full w-fit flex lg:hidden text-black">
+      <div className="flex-col gap-8 justify-normal h-full w-fit flex lg:hidden text-black">
         <h3 className="text-xl font-bold">Etapa</h3>
         <h3 className="text-xl font-bold">Status</h3>
         <h3 className="text-xl font-bold">Data</h3>
@@ -95,7 +141,7 @@ const DraggableItemComponent: FC<DraggableProps> = ({
       <div className="flex flex-col gap-4 w-full">
         <select
           className="p-2 border border-gray-300 rounded-md font-bold outline-none"
-          {...register(`steps.${step.id}.step`, { value: step.name })} // define o valor padrão
+          {...register(`steps.${step.id}.step`)} // define o valor padrão
           defaultValue={step.name}
         >
           <option value="" className="font-bold" disabled selected>
@@ -111,33 +157,51 @@ const DraggableItemComponent: FC<DraggableProps> = ({
             Entrega dos documentos
           </option>
         </select>
+
+        {error?.step && (
+          <p className="text-red-500 text-center lg:text-left font-medium text-sm">
+            {error.step.message}
+          </p>
+        )}
+
         <select
           className="p-2 border border-gray-300 rounded-md font-bold outline-none"
-          {...register(`steps.${step.id}.status`, { value: step.status })} // define o valor padrão
+          {...register(`steps.${step.id}.status`)} // define o valor padrão
           defaultValue={step.status}
         >
           <option value="" className="font-bold" disabled selected>
             Selecione uma opção
           </option>
-          <option value="Completo" className="font-bold">
-            Completo
-          </option>
-          <option value="Em progresso" className="font-bold">
-            Em progresso
-          </option>
-          <option value="Aguardando" className="font-bold">
+          <option value="waiting" className="font-bold">
             Aguardando
           </option>
+          <option value="in progress" className="font-bold">
+            Em progresso
+          </option>
+          <option value="done" className="font-bold">
+            Feita
+          </option>
         </select>
-        {error && (
+
+        {error?.status && (
           <p className="text-red-500 text-center lg:text-left font-medium text-sm">
-            {error}
+            {error.status.message}
           </p>
         )}
+
         <input
           type="date"
           className="p-2 border border-gray-300 rounded-md font-bold outline-none w-full"
+          {...register(`steps.${step.id}.data`)} // valor padrão
+          defaultValue={step.data}
         />
+
+        {error?.data && (
+          <p className="text-red-500 text-center lg:text-left font-medium text-sm">
+            {error.data.message}
+          </p>
+        )}
+
         <textarea
           placeholder="Descrição"
           rows={4}
@@ -146,6 +210,7 @@ const DraggableItemComponent: FC<DraggableProps> = ({
           })} // valor padrão
           className="p-2 border border-gray-300 rounded-md font-bold outline-none w-full"
         />
+
         <div className="flex w-full justify-between">
           <CgCloseO
             size={30}
@@ -164,65 +229,46 @@ const DraggableItemComponent: FC<DraggableProps> = ({
   )
 }
 
-export default function EditarProjeto({
-  params,
-}: {
-  params: { slug: string }
-}) {
+export default function EditarProjeto() {
+  //   {
+  //   params,
+  // }: {
+  //   params: { slug: string }
+  // }
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { setTitleHeader } = useContext(AdminContext)
+  const [apiData, setApiData] = useState(mockApi)
 
   useEffect(() => {
-    setTitleHeader(`Editar projeto #${params.slug}`)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const [steps, setSteps] = useState<Step[]>([
-    {
-      id: 0,
-      name: 'Entrega dos documentos',
-      rank: 1,
-      data: '',
-      status: '',
-      description: '',
-    },
-    {
-      id: 1,
-      name: 'Compra do equipamento',
-      rank: 2,
-      data: '',
-      status: '',
-      description: '',
-    },
-    {
-      id: 2,
-      name: 'Homologação',
-      rank: 3,
-      data: '',
-      status: '',
-      description: '',
-    },
-  ])
+    setTitleHeader(`Editar projeto #${apiData.project_name}`)
+  }, [setTitleHeader, apiData.project_name])
 
   const moveCharacter = (dragIndex: number, hoverIndex: number) => {
-    const newCharacters = [...steps]
+    const newCharacters = [...apiData.timelime]
     const [draggedItem] = newCharacters.splice(dragIndex, 1)
     newCharacters.splice(hoverIndex, 0, draggedItem)
-    setSteps(newCharacters)
+    setApiData({ ...apiData, timelime: newCharacters })
   }
 
   const {
     register,
     handleSubmit,
-    getValues,
     // reset,
     formState: { errors },
   } = useForm<schemaProps>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      nameProject: apiData.project_name,
+      email: apiData.email,
+      steps: apiData.timelime.map((step) => ({
+        step: step.name,
+        status: step.status,
+        data: step.data,
+        description: step.description,
+      })),
+    },
   })
-
-  console.log('steps', getValues('steps'))
 
   function handleSubmitContact(data: schemaProps) {
     setIsSubmitting(true)
@@ -230,7 +276,7 @@ export default function EditarProjeto({
     const formattedData = {
       email: data.email,
       project_name: data.nameProject,
-      timeline: steps.map((step, index) => ({
+      timeline: apiData.timelime.map((step, index) => ({
         id: step.id,
         rank: index + 1,
         name: data.steps[step.id].step,
@@ -244,22 +290,28 @@ export default function EditarProjeto({
 
   const removeStep = useCallback(
     (index: number) => {
-      setSteps((prevSteps) => prevSteps.filter((_, i) => i !== index))
+      setApiData((prevSteps) => {
+        const newSteps = prevSteps.timelime.filter((step) => step.id !== index)
+        return { ...prevSteps, timelime: newSteps }
+      })
     },
-    [setSteps],
+    [setApiData],
   )
 
   const addStep = useCallback(() => {
     const newStep = {
-      id: steps.length,
+      id: apiData.timelime.length,
       name: 'Entrega dos documentos',
       data: '',
       status: '',
       description: '',
-      rank: steps.length,
+      rank: apiData.timelime.length,
     }
-    setSteps((prevSteps) => [...prevSteps, newStep])
-  }, [steps])
+    setApiData((prevSteps) => {
+      const newSteps = [...prevSteps.timelime, newStep]
+      return { ...prevSteps, timelime: newSteps }
+    })
+  }, [apiData])
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -319,10 +371,10 @@ export default function EditarProjeto({
                 <h3 className="text-2xl font-bold">Data</h3>
                 <h3 className="text-2xl font-bold">Descrição</h3>
               </div>
-              {steps.map((step, index) => (
+              {apiData.timelime.map((step, index) => (
                 <DraggableItemComponent
                   key={step.id}
-                  error={errors.steps?.[step.id]?.step?.message}
+                  error={errors.steps?.[step.id]}
                   step={step}
                   index={index}
                   moveCharacter={moveCharacter}

@@ -1,5 +1,9 @@
 import { Roboto } from 'next/font/google'
 import './globals.css'
+
+import '@szhsin/react-menu/dist/index.css'
+import '@szhsin/react-menu/dist/transitions/slide.css'
+
 import { Toaster } from 'react-hot-toast'
 import { NetworkStatusNotifier } from '@/utils/networkStatusNotifier'
 import { ProviderQueryClient } from '@/contexts/QueriesContext'

@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes, ReactNode } from 'react'
 import { BiLoaderAlt } from 'react-icons/bi'
 
 interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary'
+  variant?: 'primary' | 'secondary' | 'error' | 'success'
   isLoading?: boolean
   children: ReactNode
 }
@@ -15,13 +15,18 @@ export function Button({
 }: IButtonProps) {
   const classBase = 'px-4 py-2 rounded-md font-bold duration-100'
   const classPrimary = 'bg-secondary text-white hover:bg-green-500'
+  const classError = 'bg-red-500 text-white hover:bg-red-700'
   const classSecondary =
     'border bg-transparent hover:bg-red-500 hover:text-white'
 
   return (
     <button
       className={`${classBase} ${
-        variant === 'primary' || isLoading ? classPrimary : classSecondary
+        variant === 'primary' || isLoading
+          ? classPrimary
+          : variant === 'error'
+            ? classError
+            : classSecondary
       }`}
       {...props}
     >

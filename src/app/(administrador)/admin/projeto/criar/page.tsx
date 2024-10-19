@@ -10,6 +10,8 @@ import { useForm, UseFormRegister } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AdminContext } from '@/contexts/AdminContext'
 import { Button } from '@/components/Button'
+import { RxDragHandleHorizontal } from 'react-icons/rx'
+import { format } from 'date-fns'
 
 interface Step {
   id: number
@@ -94,7 +96,7 @@ const DraggableItemComponent: FC<DraggableProps> = ({
       <div className="flex flex-col gap-4 w-full">
         <select
           className="p-2 border border-gray-300 rounded-md font-bold outline-none"
-          {...register(`steps.${step.id}.step`, { value: step.name })} // define o valor padrão
+          {...register(`steps.${step.id}.step`)} // define o valor padrão
           defaultValue={step.name}
         >
           <option value="" className="font-bold" disabled selected>
@@ -112,7 +114,7 @@ const DraggableItemComponent: FC<DraggableProps> = ({
         </select>
         <select
           className="p-2 border border-gray-300 rounded-md font-bold outline-none"
-          {...register(`steps.${step.id}.status`, { value: step.status })} // define o valor padrão
+          {...register(`steps.${step.id}.status`)} // define o valor padrão
           defaultValue={step.status}
         >
           <option value="" className="font-bold" disabled selected>
@@ -133,6 +135,12 @@ const DraggableItemComponent: FC<DraggableProps> = ({
             {error}
           </p>
         )}
+        <input
+          type="date"
+          {...register(`steps.${step.id}.data`)} // valor padrão
+          defaultValue={step.data}
+          className="p-2 border border-gray-300 rounded-md font-bold outline-none w-full"
+        />
         <textarea
           placeholder="Descrição"
           rows={4}
@@ -141,11 +149,19 @@ const DraggableItemComponent: FC<DraggableProps> = ({
           })} // valor padrão
           className="p-2 border border-gray-300 rounded-md font-bold outline-none w-full"
         />
-        <CgCloseO
-          size={30}
-          className="cursor-pointer hover:scale-105 duration-300"
-          onClick={() => removeStep(index)}
-        />
+        <div className="flex w-full justify-between">
+          <CgCloseO
+            size={30}
+            className="cursor-pointer hover:scale-105 duration-300"
+            onClick={() => removeStep(index)}
+          />
+          <RxDragHandleHorizontal
+            size={30}
+            className={`cursor-pointer hover:scale-105 duration-300 cursor-${
+              isDragging ? 'grabbing' : 'grab'
+            }`}
+          />
+        </div>
       </div>
     </li>
   )
@@ -153,6 +169,7 @@ const DraggableItemComponent: FC<DraggableProps> = ({
 
 export default function CriarProjeto() {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const dateNow = format(new Date(), 'yyyy-MM-dd')
 
   const { setTitleHeader } = useContext(AdminContext)
 
@@ -166,24 +183,24 @@ export default function CriarProjeto() {
       id: 0,
       name: 'Entrega dos documentos',
       rank: 1,
-      data: '',
-      status: '',
+      data: dateNow,
+      status: 'Em progresso',
       description: '',
     },
     {
       id: 1,
       name: 'Compra do equipamento',
       rank: 2,
-      data: '',
-      status: '',
+      data: dateNow,
+      status: 'Em progresso',
       description: '',
     },
     {
       id: 2,
       name: 'Homologação',
       rank: 3,
-      data: '',
-      status: '',
+      data: dateNow,
+      status: 'Em progresso',
       description: '',
     },
   ])
@@ -217,6 +234,8 @@ export default function CriarProjeto() {
         id: step.id,
         rank: index + 1,
         name: data.steps[step.id].step,
+        status: data.steps[step.id].status,
+        data: data.steps[step.id].data,
         description: data.steps[step.id].description || '',
       })),
     }
@@ -235,19 +254,19 @@ export default function CriarProjeto() {
   const addStep = useCallback(() => {
     const newStep = {
       id: steps.length,
-      name: 'Entrega dos documentos',
-      data: '',
-      status: '',
+      name: '',
+      data: dateNow,
+      status: 'Em progresso',
       description: '',
       rank: steps.length,
     }
     setSteps((prevSteps) => [...prevSteps, newStep])
-  }, [steps])
+  }, [steps, dateNow])
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <section className="w-full flex justify-center items-center h-[calc(100vh-95.83px)]">
-        <div className="w-full max-w-screen-xl px-4 xl:px-0 py-4 flex justify-center">
+      <section className="w-full flex justify-center items-center min-h-[calc(100vh-95.83px)]">
+        <div className="w-full max-w-screen-xl px-4 xl:px-0 py-4 lg:py-20 flex justify-center">
           <form
             className="flex flex-col gap-16 items-center"
             onSubmit={handleSubmit(handleSubmitContact)}
@@ -296,10 +315,12 @@ export default function CriarProjeto() {
               </div>
             </div>
             <ul className="characters flex gap-8 md:gap-4 flex-wrap flex-row items-start w-full">
-              {/* <div className="hidden lg:flex flex-col gap-6 items-center md:items-start w-fit">
-                <h3 className="text-2xl font-bold">Etapas</h3>
+              <div className="hidden lg:flex flex-col gap-6 items-center md:items-start w-fit">
+                <h3 className="text-2xl font-bold">Etapa</h3>
+                <h3 className="text-2xl font-bold">Status</h3>
+                <h3 className="text-2xl font-bold">Data</h3>
                 <h3 className="text-2xl font-bold">Descrição</h3>
-              </div> */}
+              </div>
               {steps.map((step, index) => (
                 <DraggableItemComponent
                   key={step.id}

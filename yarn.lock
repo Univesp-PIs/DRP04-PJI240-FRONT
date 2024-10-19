@@ -46,6 +46,10 @@
   version "8.57.1"
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.57.1.tgz#de633db3ec2ef6a3c89e2f19038063e8a122e2c2"
 
+"@hookform/resolvers@^3.9.0":
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-3.9.0.tgz#cf540ac21c6c0cd24a40cf53d8e6d64391fb753d"
+
 "@humanwhocodes/config-array@^0.13.0":
   version "0.13.0"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.13.0.tgz#fb907624df3256d04b9aa2df50d7aa97ec648748"
@@ -224,6 +228,13 @@
   dependencies:
     "@swc/counter" "^0.1.3"
     tslib "^2.4.0"
+
+"@szhsin/react-menu@^4.2.2":
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/@szhsin/react-menu/-/react-menu-4.2.2.tgz#a98d66161971e2802baa5123cc96fc9ef9b9b5b3"
+  dependencies:
+    prop-types "^15.7.2"
+    react-transition-state "^2.1.0"
 
 "@tanstack/query-core@5.56.2":
   version "5.56.2"
@@ -2324,6 +2335,10 @@ react-slugify@^4.0.1:
   resolved "https://registry.yarnpkg.com/react-slugify/-/react-slugify-4.0.1.tgz#d998d99b804e1fe07ab27b6ba6a252c84fa23215"
   dependencies:
     diacritics "^1.3.0"
+
+react-transition-state@^2.1.0:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/react-transition-state/-/react-transition-state-2.1.3.tgz#5b618149d1e6557c327a3b28383afa1239e18508"
 
 react@^18:
   version "18.3.1"

@@ -10,6 +10,7 @@ import { usePathname } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { AdminContext } from '@/contexts/AdminContext'
 import { MdOutlineAdminPanelSettings } from 'react-icons/md'
+import { MenuAdmin } from '../MenuAdmin'
 
 export function Header() {
   const { facebookURL, instagramURL, website } = mockLinks
@@ -42,12 +43,27 @@ export function Header() {
           href="/"
           className="max-w-[300px] w-full hover:scale-[1.05] duration-300"
         >
-          <Image src={logo} alt="Logo EngSol" priority className="w-full" />
+          <Image
+            src={logo}
+            alt="Logo EngSol"
+            priority
+            className="w-full h-full"
+          />
         </Link>
         {routeIsAdmin ? (
-          <h2 className="text-2xl font-semibold text-secondary flex items-center">
-            {titleHeader}
-          </h2>
+          <div className="flex items-end md:items-center gap-2 md:gap-8 flex-col-reverse md:flex-row w-full md:w-fit">
+            {titleHeader === '' ? (
+              <div
+                className="w-32 h-8 rounded-full bg-slate-400 animate-pulse duration-200 "
+                style={{ animationDelay: '0.1s' }}
+              />
+            ) : (
+              <h2 className="text-xl md:text-2xl font-semibold text-secondary flex items-center">
+                {titleHeader}
+              </h2>
+            )}
+            <MenuAdmin />
+          </div>
         ) : (
           <div className="flex items-center gap-3">
             <Link

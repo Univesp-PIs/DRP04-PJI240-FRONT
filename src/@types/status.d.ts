@@ -1,9 +1,6 @@
-export interface IResponseStatus {
+export interface IResponseListStatus {
   id: number
   name: string
-  isEnable: boolean
 }
 
-export interface ICreateStatus {
-  name: string
-}
+export type IUpdateStatus = IResponseListStatus

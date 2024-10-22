@@ -12,16 +12,30 @@ export default function Status() {
   }, [])
 
   // Estados para controlar as cores dos quadrados
-  const [homologacao, setHomologacao] = useState(false)
-  const [compraEquipamento, setCompraEquipamento] = useState(false)
-  const [entregaDocumentos, setEntregaDocumentos] = useState(true) // começa verde
+  const [status, setStatus] = useState([
+    {
+      title: 'Homologação',
+      checked: false,
+    },
+    {
+      title: 'Compra do equipamento',
+      checked: false,
+    },
+    {
+      title: 'Entrega dos documentos',
+      checked: false,
+    },
+  ])
 
   // Função para alternar entre verde e vermelho
-  const toggleColor = (
-    currentState: boolean,
-    setState: (newState: boolean) => void,
-  ) => {
-    setState(!currentState)
+  const toggleColor = (quadrado: any) => {
+    const newitem = status.map((item) => {
+      if (quadrado.title === item.title) {
+        item.checked = !item.checked
+      }
+      return item
+    })
+    setStatus(newitem)
   }
 
   return (
@@ -40,41 +54,19 @@ export default function Status() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="px-4 py-2 border border-gray-300">Homologação</td>
-              <td className="px-4 py-2 border border-gray-300">
-                <div
-                  className={`w-4 h-4 rounded cursor-pointer ${homologacao ? 'bg-green-500' : 'bg-red-500'}`}
-                  onClick={() => toggleColor(homologacao, setHomologacao)}
-                ></div>
-              </td>
-            </tr>
-            <tr>
-              <td className="px-4 py-2 border border-gray-300">
-                Compra do equipamento
-              </td>
-              <td className="px-4 py-2 border border-gray-300">
-                <div
-                  className={`w-4 h-4 rounded cursor-pointer ${compraEquipamento ? 'bg-green-500' : 'bg-red-500'}`}
-                  onClick={() =>
-                    toggleColor(compraEquipamento, setCompraEquipamento)
-                  }
-                ></div>
-              </td>
-            </tr>
-            <tr>
-              <td className="px-4 py-2 border border-gray-300">
-                Entrega dos documentos
-              </td>
-              <td className="px-4 py-2 border border-gray-300">
-                <div
-                  className={`w-4 h-4 rounded cursor-pointer ${entregaDocumentos ? 'bg-green-500' : 'bg-red-500'}`}
-                  onClick={() =>
-                    toggleColor(entregaDocumentos, setEntregaDocumentos)
-                  }
-                ></div>
-              </td>
-            </tr>
+            {status.map((item) => (
+              <tr key={item.title}>
+                <td className="px-4 py-2 border border-gray-300">
+                  {item.title}
+                </td>
+                <td className="px-4 py-2 border border-gray-300">
+                  <div
+                    className={`w-4 h-4 rounded cursor-pointer ${item.checked ? 'bg-green-500' : 'bg-red-500'}`}
+                    onClick={() => toggleColor(item)}
+                  ></div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

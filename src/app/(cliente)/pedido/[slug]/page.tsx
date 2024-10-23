@@ -1,15 +1,20 @@
 'use client'
 
-import { IoIosArrowForward } from 'react-icons/io'
+import { Button } from '@/components/Button'
+import { TimelineClient } from '@/components/Timeline'
+import { useRouter } from 'next/navigation'
 
 export default function PedidoStatus({ params }: { params: { slug: string } }) {
+  const router = useRouter()
+
   return (
-    <section className="w-full flex justify-center items-center h-[calc(100vh-95.83px)]">
+    <section className="w-full flex justify-center items-center min-h-[calc(100vh-95.83px)]">
       <div className="w-full max-w-screen-xl px-4 xl:px-0 py-4 flex flex-col justify-center items-center">
-        <h3 className="w-full md:w-[60%] bg-primary text-secondary font-medium text-xl p-2 text-center rounded-md">
+        <h3 className="w-full bg-primary text-secondary font-medium text-xl p-2 text-center rounded-md">
           Andamento do Pedido #{params.slug}
         </h3>
-        <table className="w-full md:w-[60%] text-xl p-2 text-center rounded-md divide-y divide-gray-200">
+        <TimelineClient />
+        {/* <table className="w-full text-xl p-2 text-center rounded-md divide-y divide-gray-200">
           <thead>
             <tr>
               <th></th>
@@ -104,15 +109,13 @@ export default function PedidoStatus({ params }: { params: { slug: string } }) {
               </td>
             </tr>
           </tbody>
-        </table>
-        <button
-          type="submit"
-          className="bg-secondary flex gap-1 items-center text-white py-2 px-8 rounded-xl hover:bg-primary duration-300"
-        >
-          Voltar
-          <IoIosArrowForward size={20} />
-        </button>
-        {/* TODO: Implementar a listagem de status do pedido */}
+        </table> */}
+        <Button
+          variant="primary"
+          style={{ marginTop: '1rem', padding: '0.5rem 4rem' }}
+          onClick={() => router.push('/admin/dashboard')}
+          title="Voltar"
+        />
       </div>
     </section>
   )

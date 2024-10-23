@@ -1,30 +1,35 @@
-import { IUpdateProjectParams } from '@/@types/project'
 import { api } from '@/services/apiClient'
 import { AxiosErrorWithMessage } from '@/services/errorMessage'
 import { queryClient } from '@/services/queryClient'
 import { useMutation } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 
-const fetchUpdateProject = async (params: IUpdateProjectParams) => {
-  const { data } = await api.put(`/engsol/update_project`, {
-    ...params,
+const fetchDeleteStatus = async (id: string) => {
+  const { data } = await api.delete(`/engsol/delete_condition`, {
+    params: {
+      id,
+    },
   })
 
   return data
 }
 
-export const useUpdateProject = (key: string) => {
+export const useDeleteStatus = () => {
+  const router = useRouter()
   return useMutation({
-    mutationFn: fetchUpdateProject,
+    mutationFn: fetchDeleteStatus,
     onSuccess: () => {
-      toast.success('Projeto editado com sucesso')
       queryClient.invalidateQueries({
-        queryKey: ['get-project', key],
+        queryKey: ['get-status'],
       })
 
       queryClient.invalidateQueries({
-        queryKey: ['list-projects', key],
+        queryKey: ['list-status'],
       })
+
+      toast.success('Status deletado com sucesso')
+      router.push('/admin/status')
     },
     onError: (error: AxiosErrorWithMessage) => {
       toast.error(error.response.data.error)

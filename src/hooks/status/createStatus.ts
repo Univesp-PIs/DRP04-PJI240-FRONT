@@ -1,29 +1,25 @@
-import { IUpdateProjectParams } from '@/@types/project'
 import { api } from '@/services/apiClient'
 import { AxiosErrorWithMessage } from '@/services/errorMessage'
 import { queryClient } from '@/services/queryClient'
 import { useMutation } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
-const fetchUpdateProject = async (params: IUpdateProjectParams) => {
-  const { data } = await api.put(`/engsol/update_project`, {
-    ...params,
+const fetchCreateStatus = async (name: string) => {
+  const { data } = await api.post(`/engsol/create_condition`, {
+    name,
   })
 
   return data
 }
 
-export const useUpdateProject = (key: string) => {
+export const useCreateStatus = () => {
   return useMutation({
-    mutationFn: fetchUpdateProject,
+    mutationFn: fetchCreateStatus,
     onSuccess: () => {
-      toast.success('Projeto editado com sucesso')
-      queryClient.invalidateQueries({
-        queryKey: ['get-project', key],
-      })
+      toast.success('Status criado com sucesso')
 
       queryClient.invalidateQueries({
-        queryKey: ['list-projects', key],
+        queryKey: ['list-status'],
       })
     },
     onError: (error: AxiosErrorWithMessage) => {

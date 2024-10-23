@@ -1,11 +1,11 @@
-import { ICreateProject } from '@/@types/project'
+import { ICreateProjectParams } from '@/@types/project'
 import { api } from '@/services/apiClient'
 import { AxiosErrorWithMessage } from '@/services/errorMessage'
 import { queryClient } from '@/services/queryClient'
 import { useMutation } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
-const fetchCreateProject = async (params: ICreateProject) => {
+const fetchCreateProject = async (params: ICreateProjectParams) => {
   const { data } = await api.post(`/engsol/create_project`, {
     ...params,
   })

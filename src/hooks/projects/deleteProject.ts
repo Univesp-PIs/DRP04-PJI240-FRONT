@@ -5,8 +5,8 @@ import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 
-const fetchDeleteProject = async (id: string, key: string) => {
-  const { data } = await api.delete(`/engsol/delete_project/?key=${key}`, {
+const fetchDeleteProject = async (id: string) => {
+  const { data } = await api.delete(`/engsol/delete_project`, {
     params: {
       id,
     },

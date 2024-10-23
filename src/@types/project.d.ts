@@ -31,7 +31,7 @@ export interface IResponseGetProject extends IResponseListProjects {
   timeline: ITimeline[]
 }
 
-export interface ICreateProject {
+export interface ICreateProjectParams {
   email: string
   project_name: string
   timelime: {
@@ -41,4 +41,4 @@ export interface ICreateProject {
   }[]
 }
 
-export type IUpdateProject = IResponseGetProject
+export type IUpdateProjectParams = IResponseGetProject

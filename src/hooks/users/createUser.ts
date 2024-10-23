@@ -31,7 +31,7 @@ export const useCreateUser = () => {
         })
 
         if (fnSignIn) {
-          router.push('/dashboard')
+          router.push('/admin/dashboard')
         } else {
           toast.error('Falha ao fazer login após o cadastro')
         }

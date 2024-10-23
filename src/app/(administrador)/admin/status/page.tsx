@@ -1,7 +1,7 @@
 'use client'
 
 import { AdminContext } from '@/contexts/AdminContext'
-import { useContext, useEffect, useState } from 'react'
+import { FormEvent, useContext, useEffect, useState } from 'react'
 
 export default function Status() {
   const { setTitleHeader } = useContext(AdminContext)
@@ -10,6 +10,9 @@ export default function Status() {
     setTitleHeader('Listar e criar status')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // Estado para controlar o novo nome de status
+  const [newStatus, setNewStatus] = useState('')
 
   // Estados para controlar as cores dos quadrados
   const [status, setStatus] = useState([
@@ -38,8 +41,18 @@ export default function Status() {
     setStatus(newitem)
   }
 
+  function SubmitForm(event: FormEvent) {
+    event.preventDefault()
+    setStatus([
+      ...status,
+      {
+        title: newStatus,
+        checked: false,
+      },
+    ])
+  }
   return (
-    <section className="w-full flex justify-center items-center h-[calc(40vh-95.83px)]">
+    <section className="w-full flex justify-center items-center min-h-[calc(40vh-95.83px)] py-8">
       {/* Quadro de Status com seleção de quadrados representando ativados ou desativados */}
       <div className="overflow-x-auto">
         <table className="min-w-full table-auto border-collapse border border-gray-300">
@@ -74,7 +87,7 @@ export default function Status() {
       {/* Campo de Lista de status e criar status */}
       <div className="w-[500px] max-w-screen-xl px-4 xl:px-0 py-4 flex justify-center">
         <div className="w-full"></div>
-        <div className="w-full flex flex-col gap-4">
+        <form onSubmit={SubmitForm} className="w-full flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <label
               className="cursor-pointer font-bold text-xl"
@@ -87,12 +100,17 @@ export default function Status() {
               id="statusName"
               className="w-full p-2 border border-gray-300 rounded-md"
               placeholder="Nome do status"
+              value={newStatus}
+              onChange={(event) => setNewStatus(event.target.value)}
             />
           </div>
-          <button className="px-4 py-2 bg-secondary text-white rounded-md font-bold hover:bg-[#1e1eff] duration-100">
+          <button
+            type="submit"
+            className="px-4 py-2 bg-secondary text-white rounded-md font-bold hover:bg-[#1e1eff] duration-100"
+          >
             Criar status
           </button>
-        </div>
+        </form>
       </div>
 
       {/* Botões Voltar e Salvar */}

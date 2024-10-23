@@ -57,7 +57,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     authChannel.onmessage = (message) => {
       switch (message.data) {
         case 'signOut':
-          router.push('/dashboard')
+          router.push('/admin/login')
           // window.location.reload()
           authChannel.close()
           break
@@ -69,17 +69,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [router, isAuthenticated])
 
   useEffect(() => {
-    const { 'curriculum42.data': data } = parseCookies()
+    const { 'engsol.data': data } = parseCookies()
 
     if (data) {
       const { user_id, user_email, expiry_timestamp, user_name, token } =
         JSON.parse(data)
       setUser({ user_id, user_email, expiry_timestamp, user_name, token })
-    } else if (
-      pathname.includes('curriculum/adicionar') ||
-      pathname.includes('curriculum/editar')
-    ) {
-      router.push('/')
+    } else if (pathname.includes('admin/') || pathname.includes('admin')) {
+      router.push('/admin/login')
     }
   }, [router, pathname])
 
@@ -95,7 +92,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       setCookie(
         undefined,
-        'curriculum42.data',
+        'engsol.data',
         JSON.stringify(response.data.payload),
         {
           maxAge: new Date(expiry_timestamp), // 1 dia
@@ -103,7 +100,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         },
       )
 
-      setCookie(undefined, 'curriculum42.token', token, {
+      setCookie(undefined, 'engsol.token', token, {
         maxAge: new Date(expiry_timestamp), // 1 dia
         path: '/',
       })
@@ -118,7 +115,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       // api.defaults.headers.Authorization = `Bearer ${token}`
       toast.success('Login efetuado')
-      router.push('/dashboard')
+      router.push('/admin/dashboard')
       return true
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -129,14 +126,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   function signOut() {
-    destroyCookie(undefined, 'curriculum42.token')
-    destroyCookie(undefined, 'curriculum42.data')
+    destroyCookie(undefined, 'engsol.token')
+    destroyCookie(undefined, 'engsol.data')
     toast.success('Você saiu da sua conta!')
 
     authChannel.postMessage('signOut')
     setUser(undefined)
 
-    router.push('/dashboard')
+    router.push('/admin/login')
   }
   return (
     <AuthContext.Provider

@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 
 const fetchListProjects = async (): Promise<IResponseListProjects> => {
   const { data } = await api.get<IResponseListProjects>('/engsol/list_project')
+  console.log('data', data)
 
   return data
 }
@@ -13,6 +14,7 @@ const fetchListProjects = async (): Promise<IResponseListProjects> => {
 export const useListProjects = () => {
   return useQuery({
     queryKey: ['list-projects'],
-    queryFn: () => fetchListProjects,
+    queryFn: () => fetchListProjects(),
+    refetchOnWindowFocus: true,
   })
 }

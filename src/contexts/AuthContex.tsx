@@ -76,7 +76,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         JSON.parse(data)
       setUser({ user_id, user_email, expiry_timestamp, user_name, token })
     } else if (pathname.includes('admin/') || pathname.includes('admin')) {
-      router.push('/admin/login')
+      // router.push('/admin/login')
     }
   }, [router, pathname])
 

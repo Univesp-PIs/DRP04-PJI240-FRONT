@@ -13,6 +13,6 @@ const fetchListProjects = async (): Promise<IResponseListProjects> => {
 export const useListProjects = () => {
   return useQuery({
     queryKey: ['list-projects'],
-    queryFn: () => fetchListProjects,
+    queryFn: fetchListProjects,
   })
 }

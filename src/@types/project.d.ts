@@ -1,28 +1,37 @@
-export interface IResponseListProjects {
+type IProject = {
   id: number
   name: string
-  current_status: {
-    id: string
-    name: string
-  }
-  email: string
-  access_key: string
+  key: string
 }
 
-export interface IResponseGetProject {
+type IClient = {
+  id: number
+  name: string
   email: string
-  current_status_id: number
-  project_name: string
-  timelime: {
+}
+
+type ITimeline = {
+  ranking: {
     id: number
     rank: number
-    name: string
     last_update: string
-    status: string
-  }[]
+    condition: {
+      id: number
+      name: string
+    }
+  }
 }
 
-export interface ICreateProject {
+export interface IResponseListProjects {
+  project: IProject
+  client: IClient
+}
+
+export interface IResponseGetProject extends IResponseListProjects {
+  timeline: ITimeline[]
+}
+
+export interface ICreateProjectParams {
   email: string
   project_name: string
   timelime: {
@@ -32,4 +41,4 @@ export interface ICreateProject {
   }[]
 }
 
-export type IUpdateProject = IResponseGetProject
+export type IUpdateProjectParams = IResponseGetProject

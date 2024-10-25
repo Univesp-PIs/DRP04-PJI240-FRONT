@@ -20,9 +20,9 @@ export function setupAPIClient(ctx: Context = undefined) {
   let cookies = parseCookies(ctx)
 
   const api = axios.create({
-    baseURL: 'https://curriculum42-django-render.onrender.com',
+    baseURL: 'https://engsol-django-render.onrender.com',
     headers: {
-      Authorization: `Bearer ${cookies['curriculum42.token']}`,
+      Authorization: `Bearer ${cookies['engsol.token']}`,
     },
   })
 
@@ -55,10 +55,10 @@ export function setupAPIClient(ctx: Context = undefined) {
           })
         } else {
           axios.defaults.headers.common.Authorization = false
-          destroyCookie(undefined, 'curriculum42.token')
+          destroyCookie(undefined, 'engsol.token')
           // deslogar o usuário
           if (process.browser) {
-            destroyCookie(undefined, 'curriculum42.token')
+            destroyCookie(undefined, 'engsol.token')
           } else {
             return Promise.reject(new AuthTokenError())
           }

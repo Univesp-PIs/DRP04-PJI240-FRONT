@@ -23,7 +23,7 @@ export default function Dashboard() {
   const {
     data: dataListProjects,
     isLoading: isLoadingListProjects,
-    error: errorListCurriculums,
+    error: errorListProjects,
     isFetching: isFetchingListProjects,
     refetch: refetchListProjects,
   } = useListProjects()
@@ -162,7 +162,7 @@ export default function Dashboard() {
                   </td>
                 </tr>
               ))
-            ) : errorListCurriculums ? (
+            ) : errorListProjects ? (
               <tr>
                 <td colSpan={4} className="py-2 px-4 text-center">
                   Erro ao carregar os projetos
@@ -177,7 +177,14 @@ export default function Dashboard() {
                   <td className="py-2 px-4">{project.project.key}</td>
                   <td className="py-2 px-4 flex gap-4">
                     <Button title="Enviar Email" />
-                    <Button title="Editar" />
+                    <Button
+                      title="Editar"
+                      onClick={() =>
+                        router.push(
+                          `/admin/projeto/editar/${project.project.id}`,
+                        )
+                      }
+                    />
                     <ModalGeneric
                       title="Excluir Projeto"
                       button={<Button title="Excluir" variant="error" />}

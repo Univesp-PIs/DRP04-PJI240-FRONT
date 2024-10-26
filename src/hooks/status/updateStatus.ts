@@ -4,26 +4,22 @@ import { queryClient } from '@/services/queryClient'
 import { useMutation } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
-const fetchUpdateStatus = async (id: string, name: string) => {
+const fetchUpdateStatus = async (params: { id: number; name: string }) => {
   const { data } = await api.put(`/engsol/update_condition`, {
-    id,
-    name,
+    ...params,
   })
 
   return data
 }
 
-export const useUpdateStatus = (key: string) => {
+export const useUpdateStatus = () => {
   return useMutation({
     mutationFn: fetchUpdateStatus,
     onSuccess: () => {
       toast.success('Status editado com sucesso')
-      queryClient.invalidateQueries({
-        queryKey: ['get-status', key],
-      })
 
       queryClient.invalidateQueries({
-        queryKey: ['list-status', key],
+        queryKey: ['list-status'],
       })
     },
     onError: (error: AxiosErrorWithMessage) => {

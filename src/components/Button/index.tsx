@@ -24,7 +24,8 @@ export function Button({
   className,
   ...props
 }: IButtonProps) {
-  const baseClasses = 'px-4 py-2 rounded-md font-bold duration-100'
+  const baseClasses =
+    'px-4 py-2 rounded-md font-bold text-center flex justify-center duration-100'
   const variantClasses = VARIANT_CLASSES[variant] || ''
   const loadingClasses = isLoading
     ? 'cursor-not-allowed opacity-50'
@@ -45,7 +46,7 @@ export function Button({
     >
       {isLoading ? (
         <BiLoaderAlt
-          className="animate-spin duration-500 text-white mx-8"
+          className="animate-spin duration-500 text-white"
           size={25}
         />
       ) : (

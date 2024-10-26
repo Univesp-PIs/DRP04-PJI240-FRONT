@@ -1,126 +1,153 @@
 'use client'
 
-import { AdminContext } from '@/contexts/AdminContext'
-import { FormEvent, useContext, useEffect, useState } from 'react'
+import { Button } from '@/components/Button'
+import { useStatusHook } from './useStatusHook'
 
 export default function Status() {
-  const { setTitleHeader } = useContext(AdminContext)
+  const {
+    newStatus,
+    setNewStatus,
+    status,
+    setStatus,
+    SubmitForm,
+    router,
+    UpdateStatus,
+    isLoadingListStatus,
+    errorListStatus,
+    isPendingUpdateStatus,
+    isPendingCreateStatus,
+    variablesUpdateStatus,
+  } = useStatusHook()
 
-  useEffect(() => {
-    setTitleHeader('Listar e criar status')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  // Estado para controlar o novo nome de status
-  const [newStatus, setNewStatus] = useState('')
-
-  // Estados para controlar as cores dos quadrados
-  const [status, setStatus] = useState([
-    {
-      title: 'Homologação',
-      checked: false,
-    },
-    {
-      title: 'Compra do equipamento',
-      checked: false,
-    },
-    {
-      title: 'Entrega dos documentos',
-      checked: false,
-    },
-  ])
-
-  // Função para alternar entre verde e vermelho
-  const toggleColor = (quadrado: any) => {
-    const newitem = status.map((item) => {
-      if (quadrado.title === item.title) {
-        item.checked = !item.checked
-      }
-      return item
-    })
-    setStatus(newitem)
-  }
-
-  function SubmitForm(event: FormEvent) {
-    event.preventDefault()
-    setStatus([
-      ...status,
-      {
-        title: newStatus,
-        checked: false,
-      },
-    ])
-  }
   return (
     <section className="w-full flex justify-center items-center min-h-[calc(40vh-95.83px)] py-8">
-      {/* Quadro de Status com seleção de quadrados representando ativados ou desativados */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full table-auto border-collapse border border-gray-300">
+      <div className="w-full max-w-screen-xl flex flex-col-reverse md:flex-row gap-8 md:gap-16 px-4 xl:px-0">
+        {/* Quadro de Status com seleção de quadrados representando ativados ou desativados */}
+        <table className="w-full max-w-screen-md border border-gray-300">
           <thead className="bg-gray-200">
             <tr>
-              <th className="px-4 py-2 border border-gray-300 text-left">
+              <th className="px-4 py-2 border border-gray-300">
                 Listagem dos Status
               </th>
-              <th className="px-4 py-2 border border-gray-300 text-left">
-                Disponível
-              </th>
+              <th className="px-4 py-2 border border-gray-300">Disponível</th>
+              <th className="px-4 py-2 border border-gray-300">Ação</th>
             </tr>
           </thead>
           <tbody>
-            {status.map((item) => (
-              <tr key={item.title}>
-                <td className="px-4 py-2 border border-gray-300">
-                  {item.title}
-                </td>
-                <td className="px-4 py-2 border border-gray-300">
-                  <div
-                    className={`w-4 h-4 rounded cursor-pointer ${item.checked ? 'bg-green-500' : 'bg-red-500'}`}
-                    onClick={() => toggleColor(item)}
-                  ></div>
+            {isLoadingListStatus ? (
+              Array.from({ length: 12 }).map((_, index) => (
+                <tr key={index} className="animate-pulse py-2">
+                  <td colSpan={3}>
+                    <div className="py-2 px-4 h-14 w-full bg-slate-300" />
+                  </td>
+                </tr>
+              ))
+            ) : errorListStatus ? (
+              <tr>
+                <td colSpan={3} className="py-2 px-4 text-center">
+                  Erro ao carregar os status
                 </td>
               </tr>
-            ))}
+            ) : status.length > 0 ? (
+              status.map((item) => (
+                <tr key={item.id}>
+                  <td className="px-4 py-2 border border-gray-300">
+                    <input
+                      type="text"
+                      className="w-full p-2 border border-gray-300 text-center rounded-md"
+                      value={item.name}
+                      onChange={(event) =>
+                        setStatus(
+                          status.map((status) => {
+                            if (status.id === item.id) {
+                              status.name = event.target.value
+                            }
+                            return status
+                          }),
+                        )
+                      }
+                    />
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300 ">
+                    <div className="flex justify-center">
+                      <input
+                        type="checkbox"
+                        className="w-7 h-7 rounded cursor-pointer bg-green-500"
+                        checked={item.checked}
+                        onChange={() =>
+                          setStatus(
+                            status.map((status) => {
+                              if (status.id === item.id) {
+                                status.checked = !status.checked
+                              }
+                              return status
+                            }),
+                          )
+                        }
+                      />
+                    </div>
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    <Button
+                      title="Atualizar"
+                      variant="primary"
+                      widthFull
+                      isLoading={
+                        isPendingUpdateStatus &&
+                        variablesUpdateStatus?.id === item.id
+                      }
+                      onClick={() => UpdateStatus(item.id)}
+                    />
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={3} className="py-2 px-4 text-center">
+                  Nenhum status encontrado
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
-      </div>
 
-      {/* Campo de Lista de status e criar status */}
-      <div className="w-[500px] max-w-screen-xl px-4 xl:px-0 py-4 flex justify-center">
-        <div className="w-full"></div>
-        <form onSubmit={SubmitForm} className="w-full flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <label
-              className="cursor-pointer font-bold text-xl"
-              htmlFor="statusName"
-            >
-              Digite o nome do status
-            </label>
-            <input
-              type="text"
-              id="statusName"
-              className="w-full p-2 border border-gray-300 rounded-md"
-              placeholder="Nome do status"
-              value={newStatus}
-              onChange={(event) => setNewStatus(event.target.value)}
-            />
-          </div>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-secondary text-white rounded-md font-bold hover:bg-[#1e1eff] duration-100"
-          >
-            Criar status
-          </button>
-        </form>
-      </div>
-
-      {/* Botões Voltar e Salvar */}
-      <div className="flex justify-center gap-4 mt-8 absolute bottom-8 left-0 right-0">
-        <button className="px-6 py-2 border border-[#1c199c] text-[#1c199c] bg-white rounded-md shadow hover:bg-[#a8a8a8] duration-150">
-          Voltar
-        </button>
-        <button className="px-6 py-2 bg-[#1c199c] text-white rounded-md shadow hover:bg-[#1e1eff] duration-150">
-          Salvar
-        </button>
+        {/* Campo de Lista de status e criar status */}
+        <div className="w-full flex justify-center">
+          <form onSubmit={SubmitForm} className="w-full flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <label
+                className="cursor-pointer font-bold text-xl"
+                htmlFor="statusName"
+              >
+                Criar novo status
+              </label>
+              <input
+                type="text"
+                id="statusName"
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Digite o nome do status"
+                value={newStatus}
+                onChange={(event) => setNewStatus(event.target.value)}
+              />
+            </div>
+            <div className="flex w-full gap-2">
+              <Button
+                type="button"
+                variant="secondary"
+                widthFull
+                onClick={() => router.push('/admin/dashboard')}
+                title="Voltar"
+              />
+              <Button
+                type="submit"
+                title="Criar status"
+                variant="primary"
+                widthFull
+                isLoading={isPendingCreateStatus}
+              />
+            </div>
+          </form>
+        </div>
       </div>
     </section>
   )

@@ -41,96 +41,102 @@ export default function Dashboard() {
           />
         </div>
 
-        <table className="min-w-full white border border-black">
-          <thead>
-            <tr className="bg-[#D9D9D9]">
-              <th
-                onClick={() => requestSort('name')}
-                className="py-2 px-4 text-left cursor-pointer"
-              >
-                Projetos {getSortIcon('name')}
-              </th>
-              {/* <th
-                // onClick={() => requestSort('status')}
-                className="py-2 px-4 text-left cursor-pointer"
-              >
-                Etapa
-              </th> */}
-              <th
-                // onClick={() => requestSort('email')}
-                className="py-2 px-4 text-left cursor-pointer"
-                onClick={() => requestSort('email')}
-              >
-                Email {getSortIcon('email')}
-              </th>
-              <th
-                onClick={() => requestSort('key')}
-                className="py-2 px-4 text-left cursor-pointer"
-              >
-                Chave de Acesso {getSortIcon('key')}
-              </th>
-              <th className="py-2 px-4 text-left">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoadingListProjects ? (
-              Array.from({ length: 7 }).map((_, index) => (
-                <tr key={index} className="animate-pulse py-2">
-                  <td colSpan={4}>
-                    <div className="py-2 px-4 h-14 w-full bg-slate-300" />
+        <div className="overflow-x-auto w-full">
+          <table className="min-w-full bg-white border border-black">
+            <thead>
+              <tr className="bg-[#D9D9D9]">
+                <th
+                  onClick={() => requestSort('name')}
+                  className="py-2 px-4 text-left cursor-pointer"
+                >
+                  Projetos {getSortIcon('name')}
+                </th>
+                <th
+                  onClick={() => requestSort('email')}
+                  className="py-2 px-4 text-left cursor-pointer"
+                >
+                  Email {getSortIcon('email')}
+                </th>
+                <th
+                  onClick={() => requestSort('key')}
+                  className="py-2 px-4 text-left cursor-pointer"
+                >
+                  Chave de Acesso {getSortIcon('key')}
+                </th>
+                <th className="py-2 px-4 text-left">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {isLoadingListProjects ? (
+                Array.from({ length: 7 }).map((_, index) => (
+                  <tr key={index} className="animate-pulse py-2">
+                    <td colSpan={4}>
+                      <div className="py-2 px-4 h-14 w-full bg-slate-300" />
+                    </td>
+                  </tr>
+                ))
+              ) : errorListProjects ? (
+                <tr>
+                  <td colSpan={4} className="py-2 px-4 text-center">
+                    Erro ao carregar os projetos
                   </td>
                 </tr>
-              ))
-            ) : errorListProjects ? (
-              <tr>
-                <td colSpan={4} className="py-2 px-4 text-center">
-                  Erro ao carregar os projetos
-                </td>
-              </tr>
-            ) : sortedProjects.length > 0 ? (
-              sortedProjects.map((project) => (
-                <tr key={project.project.id} className="border-t border-black">
-                  <td className="py-2 px-4">{project.project.name}</td>
-                  {/* <td className="py-2 px-4">{project.project.name}</td> */}
-                  <td className="py-2 px-4">{project.client.email}</td>
-                  <td className="py-2 px-4">{project.project.key}</td>
-                  <td className="py-2 px-4 flex gap-4">
-                    <Button title="Enviar Email" />
-                    <Button
-                      title="Editar"
-                      onClick={() =>
-                        router.push(
-                          `/admin/projeto/editar/${project.project.id}`,
-                        )
-                      }
-                    />
-                    <ModalGeneric
-                      title="Excluir Projeto"
-                      button={
-                        <Button
-                          title="Excluir"
-                          variant="error"
-                          isLoading={
-                            isPendingDeleteProject &&
-                            variablesDeleteProject === project.project.id
-                          }
-                        />
-                      }
-                      description="Tem certeza que deseja excluir o projeto? Essa ação não poderá ser desfeita."
-                      onConfirm={() => handleDeleteProject(project.project.id)}
-                    />
+              ) : sortedProjects.length > 0 ? (
+                sortedProjects.map((project) => (
+                  <tr
+                    key={project.project.id}
+                    className="border-t border-black"
+                  >
+                    <td className="py-2 px-4 whitespace-nowrap">
+                      {project.project.name}
+                    </td>
+                    <td className="py-2 px-4 whitespace-nowrap">
+                      {project.client.email}
+                    </td>
+                    <td className="py-2 px-4 whitespace-nowrap">
+                      {project.project.key}
+                    </td>
+                    <td className="py-2 px-4 flex flex-wrap gap-4">
+                      <Button title="Enviar Email" />
+                      <Button
+                        title="Editar"
+                        onClick={() =>
+                          router.push(
+                            `/admin/projeto/editar/${project.project.id}`,
+                          )
+                        }
+                      />
+                      <ModalGeneric
+                        title="Excluir Projeto"
+                        button={
+                          <Button
+                            title="Excluir"
+                            variant="error"
+                            isLoading={
+                              isPendingDeleteProject &&
+                              variablesDeleteProject === project.project.id
+                            }
+                          />
+                        }
+                        description="Tem certeza que deseja excluir o projeto? Essa ação não poderá ser desfeita."
+                        onConfirm={() =>
+                          handleDeleteProject(project.project.id)
+                        }
+                      />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={4} className="py-2 px-4 text-center">
+                    Nenhum projeto encontrado
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={4} className="py-2 px-4 text-center">
-                  Nenhum projeto encontrado
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
+
         <div className="flex gap-4 w-full justify-center">
           <Button
             title="Criar Projeto"

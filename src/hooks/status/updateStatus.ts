@@ -23,7 +23,8 @@ export const useUpdateStatus = () => {
       })
     },
     onError: (error: AxiosErrorWithMessage) => {
-      toast.error(error.response.data.error)
+      console.log(error.response.data.error)
+      toast.error('Erro ao atualizar status')
     },
   })
 }

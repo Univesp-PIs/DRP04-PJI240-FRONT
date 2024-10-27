@@ -5,9 +5,9 @@ import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 
-const fetchDeleteProject = async (id: string) => {
+const fetchDeleteProject = async (id: number) => {
   const { data } = await api.delete(`/engsol/delete_project`, {
-    params: {
+    data: {
       id,
     },
   })
@@ -32,7 +32,8 @@ export const useDeleteProject = () => {
       router.push('/admin/dashboard')
     },
     onError: (error: AxiosErrorWithMessage) => {
-      toast.error(error.response.data.error)
+      console.log(error.response.data.error)
+      toast.error('Erro ao deletar projeto')
     },
   })
 }

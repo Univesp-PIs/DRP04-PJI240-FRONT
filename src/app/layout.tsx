@@ -20,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${roboto.className} antialiased`}>
+      <body
+        className={`${roboto.className} antialiased`}
+        suppressHydrationWarning
+      >
         <NetworkStatusNotifier />
         <Toaster position="bottom-right" reverseOrder={false} />
         <ProviderQueryClient>{children}</ProviderQueryClient>

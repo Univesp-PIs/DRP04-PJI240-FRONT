@@ -7,14 +7,10 @@ import { useRouter } from 'next/navigation'
 import { FormEvent, useContext, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
-interface IStatus extends IResponseListStatus {
-  checked: boolean
-}
-
 export function useStatusHook() {
   const { setTitleHeader } = useContext(AdminContext)
   const [newStatus, setNewStatus] = useState('')
-  const [status, setStatus] = useState<IStatus[]>([])
+  const [status, setStatus] = useState<IResponseListStatus[]>([])
 
   useEffect(() => {
     setTitleHeader('Listar e criar status')
@@ -37,17 +33,13 @@ export function useStatusHook() {
     isPending: isPendingUpdateStatus,
     variables: variablesUpdateStatus,
   } = useUpdateStatus()
+
   const { mutateAsync: mutateCreateStatus, isPending: isPendingCreateStatus } =
     useCreateStatus()
 
   useEffect(() => {
     if (dataListStatus) {
-      setStatus(
-        dataListStatus.map((item) => ({
-          ...item,
-          checked: false,
-        })),
-      )
+      setStatus(dataListStatus)
     }
   }, [dataListStatus])
 
@@ -80,6 +72,7 @@ export function useStatusHook() {
     await mutateUpdateStatus({
       id: statusUpdated.id,
       name: statusUpdated.name,
+      status: statusUpdated.status,
     })
   }
 

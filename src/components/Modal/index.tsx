@@ -39,13 +39,15 @@ export function ModalGeneric({
             <Dialog.Close asChild>
               <Button variant="success" widthFull title="Não" />
             </Dialog.Close>
-            <Button
-              variant="error"
-              widthFull
-              onClick={onConfirm}
-              isLoading={isLoading}
-              title="Sim"
-            />
+            <Dialog.Close asChild>
+              <Button
+                variant="error"
+                widthFull
+                onClick={onConfirm}
+                isLoading={isLoading}
+                title="Sim"
+              />
+            </Dialog.Close>
           </div>
           <Dialog.Close asChild>
             <button

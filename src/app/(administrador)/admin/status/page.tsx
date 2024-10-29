@@ -73,12 +73,12 @@ export default function Status() {
                       <input
                         type="checkbox"
                         className="w-7 h-7 rounded cursor-pointer bg-green-500"
-                        checked={item.checked}
+                        checked={item.status}
                         onChange={() =>
                           setStatus(
                             status.map((status) => {
                               if (status.id === item.id) {
-                                status.checked = !status.checked
+                                status.status = !status.status
                               }
                               return status
                             }),

@@ -2,10 +2,26 @@
 
 import { Button } from '@/components/Button'
 import { TimelineClient } from '@/components/Timeline'
+import { useGetProjectByKey } from '@/hooks/projects/getProjectByKey'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import toast from 'react-hot-toast'
 
 export default function PedidoStatus({ params }: { params: { slug: string } }) {
   const router = useRouter()
+  const {
+    data: dataProject,
+    isLoading: isLoadingProject,
+    error: errorProject,
+  } = useGetProjectByKey(params.slug)
+
+  useEffect(() => {
+    if (errorProject) {
+      toast.error('Erro ao buscar o projeto')
+    }
+  }, [errorProject])
+
+  console.log(dataProject)
 
   return (
     <section className="w-full flex justify-center items-center min-h-[calc(100vh-95.83px)]">

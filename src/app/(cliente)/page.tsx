@@ -1,13 +1,16 @@
 'use client'
 
-import { FormEvent } from 'react'
-import toast from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
+import { FormEvent, useState } from 'react'
 import { IoIosArrowForward } from 'react-icons/io'
 
 export default function Home() {
+  const [key, setKey] = useState('')
+  const router = useRouter()
+
   function handleSubmit(event: FormEvent) {
     event.preventDefault()
-    toast.error('Funcionalidade em desenvolvimento')
+    router.push(`/pedido/${key}`)
   }
 
   return (
@@ -19,6 +22,8 @@ export default function Home() {
         <form className="flex flex-col items-center gap-8">
           <h4 className="text-lg">Chave de acesso</h4>
           <input
+            value={key}
+            onChange={(event) => setKey(event.target.value)}
             placeholder="Digite sua chave"
             className="p-2 text-lg rounded-xl border-2 border-black w-full md:w-fit text-center"
           />

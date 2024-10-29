@@ -32,7 +32,8 @@ export const useDeleteStatus = () => {
       router.push('/admin/status')
     },
     onError: (error: AxiosErrorWithMessage) => {
-      toast.error(error.response.data.error)
+      console.log(error.response.data.error)
+      toast.error('Erro ao deletar status')
     },
   })
 }

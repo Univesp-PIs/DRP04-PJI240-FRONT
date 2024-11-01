@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 "use client";
 
 import { AdminContext } from "@/contexts/AdminContext";
@@ -59,58 +60,41 @@ export default function Login() {
   }
 
   return (
-    <section className="w-full flex justify-center items-center h-[calc(100vh-95.83px)]">
-      <div className="w-full max-w-screen-xl px-4 xl:px-0 py-4 flex justify-center">
-        <div className="w-full max-w-md bg-ED7812 p-6 rounded-lg">
-          <h1 className="text-2xl font-bold text-white text-center">
-            Painel do Administrador
-          </h1>
-        </div>
-        <div className="w-full max-w-md mt-6 p-8 bg-white shadow-md rounded-lg">
-          <form action="#" method="POST" className="space-y-6">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              />
-            </div>
+    <><header className="bg-[#ED7812] text-blue-950 text-center py-5">
+      <h1>Painel do Administrador de Pedidos</h1>
+    </header><div className="container mx-auto mt-8">
+        <div className="flex flex-col items-center">
+          <div className="w-full max-w-sm">
+            <div className="md:flex md:items-center mb-6">
+              <div className="md:w-1/3">
+                <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="inline-full-name">
 
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Senha
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              />
+                </label>
+              </div>
+              <div className="md:w-2/3">
+                <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" placeholder="Login"/>
+                </div>
             </div>
+            <div className="md:flex md:items-center mb-6">
+              <div className="md:w-1/3">
+                <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="inline-password">
 
-            <div>
-              <button
-                type="submit"
-                className="w-full bg-ED7812 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300"
-              >
-                Entrar
-              </button>
+                </label>
+              </div>
+              <div className="md:w-2/3">
+                <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="password" placeholder="Senha"/>
+              </div>
             </div>
-          </form>
+            <div className="md:flex md:items-center">
+              <div className="md:w-1/3"></div>
+              <div className="md:w-2/3">
+                <button className="bg-blue-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                  Entrar
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
-  );
+      </div></>
+  )
 }

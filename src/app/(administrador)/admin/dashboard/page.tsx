@@ -24,7 +24,7 @@ export default function Dashboard() {
 
   return (
     <section className="w-full flex justify-center min-h-[calc(100vh-95.83px)]">
-      <div className="w-full max-w-screen-xl flex-col px-4 xl:px-0 py-4 flex gap-4">
+      <div className="w-full max-w-screen-xl flex-col px-4 xl:px-0 py-4 lg:py-20 flex gap-4">
         <div className="flex w-full justify-end items-center gap-8">
           <HiOutlineRefresh
             size={25}
@@ -52,10 +52,22 @@ export default function Dashboard() {
                   Projetos {getSortIcon('name')}
                 </th>
                 <th
+                  onClick={() => requestSort('name')}
+                  className="py-2 px-4 text-left cursor-pointer"
+                >
+                  Cliente {getSortIcon('name')}
+                </th>
+                <th
                   onClick={() => requestSort('email')}
                   className="py-2 px-4 text-left cursor-pointer"
                 >
                   Email {getSortIcon('email')}
+                </th>
+                <th
+                  onClick={() => requestSort('email')}
+                  className="py-2 px-4 text-left cursor-pointer"
+                >
+                  Etapa {getSortIcon('email')}
                 </th>
                 <th
                   onClick={() => requestSort('key')}
@@ -70,14 +82,14 @@ export default function Dashboard() {
               {isLoadingListProjects ? (
                 Array.from({ length: 7 }).map((_, index) => (
                   <tr key={index} className="animate-pulse py-2">
-                    <td colSpan={4}>
+                    <td colSpan={6}>
                       <div className="py-2 px-4 h-14 w-full bg-slate-300" />
                     </td>
                   </tr>
                 ))
               ) : errorListProjects ? (
                 <tr>
-                  <td colSpan={4} className="py-2 px-4 text-center">
+                  <td colSpan={6} className="py-2 px-4 text-center">
                     Erro ao carregar os projetos
                   </td>
                 </tr>
@@ -87,15 +99,15 @@ export default function Dashboard() {
                     key={project.project.id}
                     className="border-t border-black"
                   >
-                    <td className="py-2 px-4 whitespace-nowrap">
-                      {project.project.name}
+                    <td className="py-2 px-4 font-semibold">
+                      {project?.project.name}
                     </td>
-                    <td className="py-2 px-4 whitespace-nowrap">
-                      {project.client.email}
+                    <td className="py-2 px-4">{project.client.name}</td>
+                    <td className="py-2 px-4">{project.client.email}</td>
+                    <td className="py-2 px-4">
+                      {project?.timeline[0]?.ranking.condition.name}
                     </td>
-                    <td className="py-2 px-4 whitespace-nowrap">
-                      {project.project.key}
-                    </td>
+                    <td className="py-2 px-4">{project?.project.key}</td>
                     <td className="py-2 px-4 flex flex-wrap gap-4">
                       <Button title="Enviar Email" />
                       <Button
@@ -128,7 +140,7 @@ export default function Dashboard() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} className="py-2 px-4 text-center">
+                  <td colSpan={6} className="py-2 px-4 text-center">
                     Nenhum projeto encontrado
                   </td>
                 </tr>

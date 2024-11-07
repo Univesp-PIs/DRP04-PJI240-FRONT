@@ -32,6 +32,8 @@ export function Header() {
     }
   }, [])
 
+  console.log('titleHeader: ', titleHeader)
+
   return (
     <header
       className={`w-full flex justify-center bg-primary z-20 top-0 ${
@@ -52,7 +54,7 @@ export function Header() {
         </Link>
         {routeIsAdmin ? (
           <div className="flex items-end md:items-center gap-2 md:gap-8 flex-col-reverse md:flex-row w-full md:w-fit">
-            {titleHeader === '' ? (
+            {titleHeader === '' || titleHeader.includes('undefined') ? (
               <div
                 className="w-32 h-8 rounded-full bg-slate-400 animate-pulse duration-200 "
                 style={{ animationDelay: '0.1s' }}

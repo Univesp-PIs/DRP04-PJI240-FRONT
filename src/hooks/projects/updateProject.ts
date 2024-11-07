@@ -13,17 +13,17 @@ const fetchUpdateProject = async (params: IUpdateProjectParams) => {
   return data
 }
 
-export const useUpdateProject = (key: string) => {
+export const useUpdateProject = () => {
   return useMutation({
     mutationFn: fetchUpdateProject,
     onSuccess: () => {
       toast.success('Projeto editado com sucesso')
       queryClient.invalidateQueries({
-        queryKey: ['get-project', key],
+        queryKey: ['get-project'],
       })
 
       queryClient.invalidateQueries({
-        queryKey: ['list-projects', key],
+        queryKey: ['list-projects'],
       })
     },
     onError: (error: AxiosErrorWithMessage) => {

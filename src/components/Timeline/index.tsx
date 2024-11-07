@@ -1,5 +1,8 @@
 'use client'
 
+import { IResponseGetProject } from '@/@types/project'
+import { mockProgress } from '@/mocks/mockProgress'
+import { format, parse, parseISO } from 'date-fns'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { FaCheckCircle } from 'react-icons/fa'
 import { FaRegHourglassHalf } from 'react-icons/fa6'
@@ -7,124 +10,105 @@ import {
   VerticalTimeline,
   VerticalTimelineElement,
 } from 'react-vertical-timeline-component'
+import { ptBR } from 'date-fns/locale'
 
-export function TimelineClient() {
+const iconProgress = {
+  done: <FaCheckCircle size={50} />,
+  'in progress': (
+    <FaRegHourglassHalf
+      size={50}
+      className="animate-spin"
+      style={{
+        animationDuration: '5s',
+      }}
+    />
+  ),
+  waiting: (
+    <AiOutlineLoading3Quarters
+      size={50}
+      className="animate-spin"
+      style={{
+        animationDuration: '5s',
+      }}
+    />
+  ),
+}
+
+export function TimelineClient({
+  data,
+}: {
+  data: IResponseGetProject | undefined
+}) {
+  if (!data) return
+
+  if (!data.timeline.length) {
+    return (
+      <div className="w-full p-4 border rounded-md">
+        Ainda não há nenhuma atualização do progresso
+      </div>
+    )
+  }
+
+  function formatDate(dateString: string) {
+    let date
+
+    // Verifica se a data está no formato `dd/MM/yyyy`
+    if (dateString.includes('/')) {
+      date = parse(dateString, 'dd/MM/yyyy', new Date())
+    }
+    // Caso contrário, considera o formato `yyyy-MM-dd`
+    else {
+      date = parseISO(dateString)
+    }
+
+    // Formata a data para `dd/MM/yyyy`
+    return format(date, 'dd/MM/yyyy', { locale: ptBR })
+  }
+
   return (
     <VerticalTimeline lineColor="#F1F1F1" className="customTimeline">
-      <VerticalTimelineElement
-        visible
-        contentStyle={{
-          // background: '#F1F1F1',
-          color: '#000',
-        }}
-        position="right"
-        dateClassName="text-black"
-        iconStyle={{ background: 'green', color: '#fff' }}
-        icon={<FaCheckCircle size={50} />}
-      >
-        <div className="flex gap-4 justify-between w-full">
-          <div className="flex flex-col">
-            <span className="text-xl font-bold">Compra do equipamento</span>
-            <span>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eius
-              doloremque, maxime cum repellendus assumenda officiis obcaecati
-              natus itaque a dicta quod error nostrum, architecto deserunt enim,
-              commodi quis mollitia? Non?
-            </span>
-          </div>
-          <div className="flex flex-col">
-            <span>Atualizado em</span>
-            <span className="text-xl font-bold">19/10/2024</span>
-          </div>
-        </div>
-      </VerticalTimelineElement>
-      <VerticalTimelineElement
-        visible
-        contentStyle={{
-          // background: '#7ea74c',
-          color: '#000',
-        }}
-        position="right"
-        dateClassName="text-black"
-        iconStyle={{ background: 'yellow', color: '#4A87E2' }}
-        icon={
-          <AiOutlineLoading3Quarters
-            className="animate-spin"
-            style={{
-              animationDuration: '7s',
+      {data.timeline.map((item, index) => {
+        // Uso
+        const formattedDate = formatDate(item.ranking.last_update)
+
+        return (
+          <VerticalTimelineElement
+            key={index}
+            visible
+            contentStyle={{
+              // background: '#F1F1F1',
+              color: '#000',
             }}
-          />
-        }
-      >
-        <div className="flex gap-4 justify-between w-full">
-          <div className="flex flex-col">
-            <span className="text-xl font-bold">Compra do equipamento</span>
-            <span>Compra Efetuada</span>
-          </div>
-          <div className="flex flex-col">
-            <span>Atualizado em</span>
-            <span className="text-xl font-bold">19/10/2024</span>
-          </div>
-        </div>
-      </VerticalTimelineElement>
-      <VerticalTimelineElement
-        visible
-        contentStyle={{
-          // background: '#7ea74c',
-          color: '#000',
-        }}
-        position="right"
-        dateClassName="text-black"
-        iconStyle={{ background: '#D9D9D9', color: '#4A87E2' }}
-        icon={
-          <FaRegHourglassHalf
-            className="animate-spin"
-            style={{
-              animationDuration: '7s',
-            }}
-          />
-        }
-      >
-        <div className="flex gap-4 justify-between w-full">
-          <div className="flex flex-col">
-            <span className="text-xl font-bold">Compra do equipamento</span>
-            <span>Compra Efetuada</span>
-          </div>
-          <div className="flex flex-col">
-            <span>Atualizado em</span>
-            <span className="text-xl font-bold">19/10/2024</span>
-          </div>
-        </div>
-      </VerticalTimelineElement>
-      <VerticalTimelineElement
-        visible
-        contentStyle={{
-          // background: '#7ea74c',
-          color: '#000',
-        }}
-        position="right"
-        dateClassName="text-black"
-        iconStyle={{ background: '#D9D9D9', color: '#4A87E2' }}
-        icon={
-          <FaRegHourglassHalf
-            className="animate-spin"
-            style={{
-              animationDuration: '7s',
-            }}
-          />
-        }
-      >
-        <div className="flex gap-4 justify-between w-full">
-          <div className="flex flex-col">
-            <span className="text-xl font-bold">Compra do equipamento</span>
-            <span>Compra Efetuada</span>
-          </div>
-          <div className="flex flex-col">
-            <span>Atualizado em</span>
-            <span className="text-xl font-bold">19/10/2024</span>
-          </div>
-        </div>
-      </VerticalTimelineElement>
+            position="right"
+            dateClassName="text-black"
+            iconStyle={{ background: 'green', color: '#fff' }}
+            icon={iconProgress[item.ranking.note]}
+          >
+            <div className="flex gap-4 justify-between w-full">
+              <div className="flex flex-col">
+                <span className="text-xl font-bold">{item.condition.name}</span>
+                <span className="text-lg font-semibold text-secondary">
+                  (
+                  {
+                    mockProgress.find(
+                      (progress) => progress.type === item.ranking.note,
+                    )?.text
+                  }
+                  )
+                </span>
+                <span>{item.ranking.description}</span>
+              </div>
+              <div className="flex flex-col">
+                <span>Atualizado em</span>
+                <span className="text-xl font-bold">
+                  {formattedDate}
+                  {/* {format(date, 'dd/MM/yyyy', { locale: ptBR })} */}
+                </span>
+              </div>
+            </div>
+          </VerticalTimelineElement>
+        )
+      })}
     </VerticalTimeline>
   )
 }

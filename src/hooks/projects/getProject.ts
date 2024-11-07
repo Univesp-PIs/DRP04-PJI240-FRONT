@@ -4,11 +4,9 @@ import { api } from '@/services/apiClient'
 import { useQuery } from '@tanstack/react-query'
 
 const fetchGetProject = async (id: string): Promise<IResponseGetProject> => {
-  const { data } = await api.get<IResponseGetProject>('/engsol/info_project', {
-    params: {
-      id,
-    },
-  })
+  const { data } = await api.get<IResponseGetProject>(
+    `/engsol/info_project?id=${id}`,
+  )
 
   return data
 }

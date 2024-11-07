@@ -6,11 +6,7 @@ import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 
 const fetchDeleteProject = async (id: number) => {
-  const { data } = await api.delete(`/engsol/delete_project`, {
-    data: {
-      id,
-    },
-  })
+  const { data } = await api.delete(`/engsol/delete_project?id=${id}`)
 
   return data
 }
@@ -20,10 +16,6 @@ export const useDeleteProject = () => {
   return useMutation({
     mutationFn: fetchDeleteProject,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['get-project'],
-      })
-
       queryClient.invalidateQueries({
         queryKey: ['list-projects'],
       })

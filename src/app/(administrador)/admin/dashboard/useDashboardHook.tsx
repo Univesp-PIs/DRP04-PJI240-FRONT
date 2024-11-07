@@ -52,12 +52,17 @@ export function useDashboardHook() {
     setSearch(e.target.value)
   }
 
-  const filteredProjects = projects.filter(
-    (project: IResponseListProjects) =>
-      project.client.name.toLowerCase().includes(search.toLowerCase()) ||
-      project.project.name.toLowerCase().includes(search.toLowerCase()) ||
-      project.project.key.toLowerCase().includes(search.toLowerCase()),
-  )
+  const filteredProjects = projects
+    ? projects.filter(
+        (project: IResponseListProjects) =>
+          project.client.name.toLowerCase().includes(search.toLowerCase()) ||
+          project.project.name.toLowerCase().includes(search.toLowerCase()) ||
+          project.project.key?.toLowerCase().includes(search.toLowerCase()) ||
+          project.timeline[0].ranking.condition.name
+            .toLowerCase()
+            .includes(search.toLowerCase()),
+      )
+    : []
 
   const sortedProjects = [...filteredProjects].sort((a, b) => {
     if (sortConfig !== null) {

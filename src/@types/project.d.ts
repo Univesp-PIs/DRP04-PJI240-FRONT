@@ -1,11 +1,11 @@
 type IProject = {
   id: number
   name: string
-  key: string
+  key?: string
 }
 
 type IClient = {
-  id: number
+  id?: number
   name: string
   email: string
 }
@@ -13,11 +13,13 @@ type IClient = {
 type ITimeline = {
   ranking: {
     id: number
-    rank: number
+    rank: string
     last_update: string
+    note: 'waiting' | 'in progress' | 'done'
+    description: string
     condition: {
       id: number
-      name: string
+      name?: string
     }
   }
 }
@@ -25,11 +27,10 @@ type ITimeline = {
 export interface IResponseListProjects {
   project: IProject
   client: IClient
-}
-
-export interface IResponseGetProject extends IResponseListProjects {
   timeline: ITimeline[]
 }
+
+export type IResponseGetProject = IResponseListProjects
 
 export interface ICreateProjectParams {
   email: string

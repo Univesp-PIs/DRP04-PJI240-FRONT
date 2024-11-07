@@ -7,12 +7,7 @@ const fetchGetProjectByKey = async (
   key: string,
 ): Promise<IResponseGetProject> => {
   const { data } = await api.get<IResponseGetProject>(
-    '/engsol/search_project',
-    {
-      params: {
-        key,
-      },
-    },
+    `/engsol/search_project?key=${key}`,
   )
 
   return data

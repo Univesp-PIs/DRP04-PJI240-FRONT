@@ -29,10 +29,10 @@ export function ModalGeneric({
       <Dialog.Portal>
         <Dialog.Overlay className="bg-black/60 z-20 data-[state=open]:animate-overlayShow fixed inset-0" />
         <Dialog.Content className="overflow-y-auto z-30 flex flex-col gap-4 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-gray-200 p-4 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]">
-          <Dialog.Title className="text-primary font-semibold text-xl">
+          <Dialog.Title className="text-black font-semibold text-xl">
             {title}
           </Dialog.Title>
-          <Dialog.Description className="text-primary">
+          <Dialog.Description className="text-black">
             {description}
           </Dialog.Description>
           <div className="w-full flex gap-4">

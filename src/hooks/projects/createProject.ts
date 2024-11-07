@@ -3,6 +3,7 @@ import { api } from '@/services/apiClient'
 import { AxiosErrorWithMessage } from '@/services/errorMessage'
 import { queryClient } from '@/services/queryClient'
 import { useMutation } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 
 const fetchCreateProject = async (params: ICreateProjectParams) => {
@@ -14,6 +15,7 @@ const fetchCreateProject = async (params: ICreateProjectParams) => {
 }
 
 export const useCreateProject = () => {
+  const router = useRouter()
   return useMutation({
     mutationFn: fetchCreateProject,
     onSuccess: () => {
@@ -22,6 +24,8 @@ export const useCreateProject = () => {
       queryClient.invalidateQueries({
         queryKey: ['list-projects'],
       })
+
+      router.push('/admin/dashboard')
     },
     onError: (error: AxiosErrorWithMessage) => {
       console.log(error.response.data.error)

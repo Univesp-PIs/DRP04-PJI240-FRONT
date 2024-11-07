@@ -4,7 +4,6 @@ import { FormEvent, useContext, useEffect, useState } from 'react'
 import { AiOutlinePlusCircle } from 'react-icons/ai'
 import { AdminContext } from '@/contexts/AdminContext'
 import { Button } from '@/components/Button'
-
 import { useRouter } from 'next/navigation'
 import { ModalGeneric } from '@/components/Modal'
 import { useGetProject } from '@/hooks/projects/getProject'
@@ -27,7 +26,7 @@ export default function EditarProjeto({
   const {
     data: dataProject,
     isLoading: isLoadingProject,
-    // error: errorProject,
+    error: errorProject,
   } = useGetProject(params.slug)
 
   const {
@@ -47,8 +46,6 @@ export default function EditarProjeto({
   const [timelineDeleted, setTimelineDeleted] = useState<
     IResponseGetProject['timeline']
   >([])
-
-  console.log('timelineDeleted', timelineDeleted)
 
   useEffect(() => {
     setTitleHeader(`Editar projeto #${dataApiProject?.project.name}`)
@@ -162,7 +159,7 @@ export default function EditarProjeto({
     }
   }
 
-  return isLoadingProject ? (
+  return isLoadingProject || errorProject ? (
     <SkeletonProject />
   ) : (
     <section className="w-full flex justify-center items-center min-h-[calc(100vh-95.83px)]">

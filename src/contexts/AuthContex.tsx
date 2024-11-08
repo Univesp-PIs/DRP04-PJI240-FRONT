@@ -120,14 +120,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      toast.error(`${err.response.data.error}`)
+      toast.error('Usuário ou senha inválidos')
+      console.log(err.response.data.error)
       return false
     }
   }
 
   function signOut() {
-    destroyCookie(undefined, 'engsol.token')
     destroyCookie(undefined, 'engsol.data')
+    destroyCookie(undefined, 'engsol.token')
     toast.success('Você saiu da sua conta!')
 
     authChannel.postMessage('signOut')

@@ -28,6 +28,7 @@ export function MenuAdmin() {
   return (
     <div className="flex gap-4 uppercase">
       <button
+        title="Menu"
         type="button"
         ref={ref}
         {...anchorProps}

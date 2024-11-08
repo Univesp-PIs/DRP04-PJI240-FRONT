@@ -1,25 +1,50 @@
 /* eslint-disable prettier/prettier */
 "use client";
 
+import { Button } from "@/components/Button";
 import { AdminContext } from "@/contexts/AdminContext";
 import { AuthContext } from "@/contexts/AuthContex";
 import { useRouter } from "next/navigation";
-import { FormEvent, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+// import ReCAPTCHA from 'react-google-recaptcha'
+
+const schema = z.object({
+  email: z.string().email('Digite um email válido'),
+  password: z.string(),
+})
+
+type schemaLoginProps = z.infer<typeof schema>
 
 export default function Login() {
   const { setTitleHeader } = useContext(AdminContext);
   const { signIn, isAuthenticated } = useContext(AuthContext);
-  // const [isSubmitting, setIsSubmitting] = useState(false)
 
-  console.log("isAuthenticated", isAuthenticated);
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  // const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
+  const [recaptchaKey, setRecaptchaKey] = useState<number>(0) // Variável para recriar o reCAPTCHA
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const handleRecaptchaChange = (value: string | null) => {
+  //   // Esta função será chamada quando o usuário completar o reCAPTCHA com sucesso.
+  //   setRecaptchaValue(value)
+  // }
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<schemaLoginProps>({
+    resolver: zodResolver(schema),
+  })
 
   useEffect(() => {
-    setTitleHeader("Painel do Administrador dos Pedidos");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    setTitleHeader("Painel do Administrador");
+  }, [setTitleHeader]);
 
   const router = useRouter();
 
@@ -29,9 +54,8 @@ export default function Login() {
     }
   }, [isAuthenticated, router]);
 
-  async function handleLogin(e: FormEvent) {
-    e.preventDefault();
-    // setIsSubmitting(true)
+  async function handleLogin(data: schemaLoginProps) {
+    setIsSubmitting(true)
 
     // if (recaptchaValue === null) {
     //   toast.error('Preencha o re-captcha.')
@@ -39,62 +63,93 @@ export default function Login() {
     //   return
     // }
 
-    const fnSignIn = await signIn({ email, password });
-
-    console.log("fnSignIn", fnSignIn);
-    return;
+    const fnSignIn = await signIn(data)
 
     // Incrementa a chave do reCAPTCHA para recriá-lo
-    // setRecaptchaKey(recaptchaKey + 1)
+    setRecaptchaKey(recaptchaKey + 1)
 
-    // reset()
+    reset()
 
-    setEmail("")
-    setPassword("")
-
-    // setIsSubmitting(false)
+    setIsSubmitting(false)
 
     if (fnSignIn) {
-      router.push("/admin/dashboard");
+      router.push('/admin/dashboard')
     }
   }
 
   return (
-    <><header className="bg-[#ED7812] text-blue-950 text-center py-5">
-      <h1>Painel do Administrador de Pedidos</h1>
-    </header><div className="container mx-auto mt-8">
-        <div className="flex flex-col items-center">
-          <div className="w-full max-w-sm">
-            <div className="md:flex md:items-center mb-6">
-              <div className="md:w-1/3">
-                <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="inline-full-name">
-
-                </label>
-              </div>
-              <div className="md:w-2/3">
-                <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" placeholder="Login"/>
-                </div>
+    <section className="w-full flex justify-center items-center min-h-[calc(100vh-95.83px)]">
+      <div className="w-full max-w-screen-xl px-4 xl:px-0 py-4 lg:py-20 flex justify-center">
+        <form
+          className="w-full flex flex-col gap-16 items-center"
+          onSubmit={handleSubmit(handleLogin)}
+        >
+          <div className="w-full flex flex-col gap-4 max-w-screen-md">
+            <div className="text-center md:text-left flex flex-col gap-2">
+              <label
+                className="cursor-pointer font-bold text-xl"
+                htmlFor="email"
+              >
+                Email
+              </label>
+              <input
+                type="text"
+                id="email"
+                {...register('email')}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Email de acesso"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-center md:text-left">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
-            <div className="md:flex md:items-center mb-6">
-              <div className="md:w-1/3">
-                <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="inline-password">
-
-                </label>
+            <div className="text-center md:text-left flex flex-col gap-2">
+              <label
+                className="cursor-pointer font-bold text-xl"
+                htmlFor="password"
+              >
+                Senha
+              </label>
+              <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                {...register('password')}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Senha de acesso"
+              />
+              {showPassword ? (
+                  <FaRegEyeSlash
+                    size={20}
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute cursor-pointer right-4 top-0 translate-y-1/2 text-secondary"
+                  />
+                ) : (
+                  <FaRegEye
+                    size={20}
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute cursor-pointer right-4 bottom-[30%] text-secondary"
+                  />
+                )}
               </div>
-              <div className="md:w-2/3">
-                <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="password" placeholder="Senha"/>
-              </div>
+              {errors.password && (
+                <p className="text-red-500 text-center md:text-left">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
-            <div className="md:flex md:items-center">
-              <div className="md:w-1/3"></div>
-              <div className="md:w-2/3">
-                <button className="bg-blue-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-                  Entrar
-                </button>
-              </div>
-            </div>
+            {/* <ReCAPTCHA
+                key={recaptchaKey}
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.toString() || ''}
+                onChange={handleRecaptchaChange}
+                className="max-w-[300px]"
+              /> */}
+            <Button type="submit" variant="primary" title="Entrar" isLoading={isSubmitting} />
           </div>
-        </div>
-      </div></>
+        </form>
+      </div>
+    </section>
   )
 }

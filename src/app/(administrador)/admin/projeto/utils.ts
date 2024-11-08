@@ -2,7 +2,6 @@ import { IResponseGetProject } from '@/@types/project'
 import toast from 'react-hot-toast'
 
 export function formatedProject(data: IResponseGetProject) {
-  console.log('data', data)
   return {
     project: {
       id: data.project.id,

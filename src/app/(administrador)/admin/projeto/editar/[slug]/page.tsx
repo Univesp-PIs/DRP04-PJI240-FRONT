@@ -48,7 +48,7 @@ export default function EditarProjeto({
   >([])
 
   useEffect(() => {
-    setTitleHeader(`Editar projeto #${dataApiProject?.project.name}`)
+    setTitleHeader(`Editar projeto: ${dataApiProject?.project.name}`)
   }, [setTitleHeader, dataApiProject?.project.name])
 
   useEffect(() => {
@@ -79,6 +79,8 @@ export default function EditarProjeto({
 
     // Atualiza o projeto
     await mutateUpdateProject(dataToSave)
+
+    setTimelineDeleted([])
   }
 
   async function handleDeleteProject(id: number) {

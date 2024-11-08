@@ -56,9 +56,11 @@ export function setupAPIClient(ctx: Context = undefined) {
         } else {
           axios.defaults.headers.common.Authorization = false
           destroyCookie(undefined, 'engsol.token')
+          destroyCookie(undefined, 'engsol.data')
           // deslogar o usuário
           if (process.browser) {
             destroyCookie(undefined, 'engsol.token')
+            destroyCookie(undefined, 'engsol.data')
           } else {
             return Promise.reject(new AuthTokenError())
           }

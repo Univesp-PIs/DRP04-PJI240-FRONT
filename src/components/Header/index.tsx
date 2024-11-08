@@ -11,6 +11,8 @@ import { useContext, useEffect, useState } from 'react'
 import { AdminContext } from '@/contexts/AdminContext'
 import { MdOutlineAdminPanelSettings } from 'react-icons/md'
 import { MenuAdmin } from '../MenuAdmin'
+import { LuLogOut } from 'react-icons/lu'
+import { AuthContext } from '@/contexts/AuthContex'
 
 export function Header() {
   const { facebookURL, instagramURL, website } = mockLinks
@@ -18,6 +20,7 @@ export function Header() {
   const pathname = usePathname()
   const routeIsAdmin = pathname.includes('/admin')
   const { titleHeader } = useContext(AdminContext)
+  const { signOut, isAuthenticated } = useContext(AuthContext)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,8 +35,6 @@ export function Header() {
     }
   }, [])
 
-  console.log('titleHeader: ', titleHeader)
-
   return (
     <header
       className={`w-full flex justify-center bg-primary z-20 top-0 ${
@@ -42,7 +43,7 @@ export function Header() {
     >
       <div className="w-full max-w-screen-xl px-4 xl:px-0 py-4 flex justify-between">
         <Link
-          href="/"
+          href={isAuthenticated ? '/admin/dashboard' : '/'}
           className="max-w-[300px] w-full hover:scale-[1.05] duration-300"
         >
           <Image
@@ -64,7 +65,19 @@ export function Header() {
                 {titleHeader}
               </h2>
             )}
-            <MenuAdmin />
+            {isAuthenticated && (
+              <>
+                <MenuAdmin />
+                <button
+                  type="button"
+                  onClick={signOut}
+                  title="Sair do sistema"
+                  className="uppercase flex gap-2 items-center cursor-pointer bg-black text-white p-2 rounded-lg hover:scale-105 duration-300"
+                >
+                  <LuLogOut size={30} />
+                </button>
+              </>
+            )}
           </div>
         ) : (
           <div className="flex items-center gap-3">

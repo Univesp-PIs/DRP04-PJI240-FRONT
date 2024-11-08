@@ -57,10 +57,7 @@ export function useDashboardHook() {
         (project: IResponseListProjects) =>
           project.client.name.toLowerCase().includes(search.toLowerCase()) ||
           project.project.name.toLowerCase().includes(search.toLowerCase()) ||
-          project.project.key?.toLowerCase().includes(search.toLowerCase()) ||
-          project.timeline[0].ranking.condition.name
-            .toLowerCase()
-            .includes(search.toLowerCase()),
+          project.project.key?.toLowerCase().includes(search.toLowerCase()),
       )
     : []
 
@@ -74,10 +71,10 @@ export function useDashboardHook() {
         sortConfig.key === 'name' || sortConfig.key === 'key'
           ? b.project[sortConfig.key]
           : b.client[sortConfig.key as keyof IResponseListProjects['client']]
-      if (aKey < bKey) {
+      if (aKey && bKey && aKey < bKey) {
         return sortConfig.direction === 'ascending' ? -1 : 1
       }
-      if (aKey > bKey) {
+      if (aKey && bKey && aKey > bKey) {
         return sortConfig.direction === 'ascending' ? 1 : -1
       }
     }

@@ -1,12 +1,15 @@
-import { IResponseGetProject } from '@/@types/project'
+import { ICreateProjectParams, IResponseGetProject } from '@/@types/project'
 import toast from 'react-hot-toast'
 
-export function formatedProject(data: IResponseGetProject) {
+export function formatedProject(
+  data: IResponseGetProject,
+): ICreateProjectParams {
   return {
     project: {
       id: data.project.id,
       name: data.project.name,
     },
+
     client: {
       name: data.client.name,
       email: data.client.email,

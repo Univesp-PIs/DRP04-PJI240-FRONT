@@ -86,7 +86,9 @@ export function TimelineClient({
           >
             <div className="flex gap-4 justify-between w-full">
               <div className="flex flex-col">
-                <span className="text-xl font-bold">{item.condition.name}</span>
+                <span className="text-xl font-bold">
+                  {item.ranking.condition.name}
+                </span>
                 <span className="text-lg font-semibold text-secondary">
                   (
                   {

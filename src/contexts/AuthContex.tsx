@@ -76,7 +76,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         JSON.parse(data)
       setUser({ user_id, user_email, expiry_timestamp, user_name, token })
     } else if (pathname.includes('admin/') || pathname.includes('admin')) {
-      // router.push('/admin/login')
+      router.push('/admin/login')
     }
   }, [router, pathname])
 
@@ -90,17 +90,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const { user_id, user_email, expiry_timestamp, user_name, token } =
         response.data.payload
 
-      setCookie(
-        undefined,
-        'engsol.data',
-        JSON.stringify(response.data.payload),
-        {
-          maxAge: new Date(expiry_timestamp), // 1 dia
-          path: '/',
-        },
-      )
+      setCookie(null, 'engsol.data', JSON.stringify(response.data.payload), {
+        maxAge: new Date(expiry_timestamp), // 1 dia
+        path: '/',
+      })
 
-      setCookie(undefined, 'engsol.token', token, {
+      setCookie(null, 'engsol.token', token, {
         maxAge: new Date(expiry_timestamp), // 1 dia
         path: '/',
       })
@@ -127,8 +122,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   function signOut() {
-    destroyCookie(undefined, 'engsol.data')
-    destroyCookie(undefined, 'engsol.token')
+    // console.log('signOut')
+    destroyCookie(null, 'engsol.data', {
+      path: '/',
+    })
+    destroyCookie(null, 'engsol.token', {
+      path: '/',
+    })
     toast.success('Você saiu da sua conta!')
 
     authChannel.postMessage('signOut')

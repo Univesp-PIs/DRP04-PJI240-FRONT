@@ -33,13 +33,9 @@ export interface IResponseListProjects {
 export type IResponseGetProject = IResponseListProjects
 
 export interface ICreateProjectParams {
-  email: string
-  project_name: string
-  timelime: {
-    id: number
-    rank: number
-    name: string
-  }[]
+  project: IProject
+  client: IClient
+  timeline: ITimeline[]
 }
 
 export type IUpdateProjectParams = IResponseGetProject

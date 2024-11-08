@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 const schema = z.object({
   email: z.string().email('Digite um email válido'),
-  password: z.string(),
+  password: z.string().min(1, 'Digite a senha de acesso'),
 })
 
 type schemaLoginProps = z.infer<typeof schema>

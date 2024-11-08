@@ -4,7 +4,7 @@ import { GetServerSidePropsContext } from 'next'
 import { AuthTokenError } from '../errors/AuthTokenError'
 
 interface AxiosErrorResponse {
-  message?: string
+  error?: string
 }
 
 type Context = undefined | GetServerSidePropsContext
@@ -26,17 +26,20 @@ export function setupAPIClient(ctx: Context = undefined) {
     },
   })
 
+  // console.log('cookies antes', parseCookies())
   api.interceptors.response.use(
     (response) => {
       return response
     },
     (error: AxiosError<AxiosErrorResponse>) => {
       if (error.response?.status === 401) {
-        if (error.response.data?.message === 'Token inválido') {
+        if (error.response.data?.error === 'Token inválido') {
           const originalConfig = error.config
 
           // renovar token
           cookies = parseCookies()
+
+          // console.log('cookies depois', cookies)
 
           return new Promise((resolve, reject) => {
             failedRequestsQueue.push({
@@ -54,13 +57,23 @@ export function setupAPIClient(ctx: Context = undefined) {
             })
           })
         } else {
+          // console.log('cai aqui')
+
           axios.defaults.headers.common.Authorization = false
-          destroyCookie(undefined, 'engsol.token')
-          destroyCookie(undefined, 'engsol.data')
+          destroyCookie(null, 'engsol.data', {
+            path: '/',
+          })
+          destroyCookie(null, 'engsol.token', {
+            path: '/',
+          })
           // deslogar o usuário
           if (process.browser) {
-            destroyCookie(undefined, 'engsol.token')
-            destroyCookie(undefined, 'engsol.data')
+            destroyCookie(null, 'engsol.data', {
+              path: '/',
+            })
+            destroyCookie(null, 'engsol.token', {
+              path: '/',
+            })
           } else {
             return Promise.reject(new AuthTokenError())
           }

@@ -34,6 +34,12 @@ const iconProgress = {
   ),
 }
 
+const colorsProgress = {
+  done: '#00bf19',
+  'in progress': '#FBEA4F',
+  waiting: '#D9D9D9',
+}
+
 export function TimelineClient({
   data,
 }: {
@@ -81,7 +87,10 @@ export function TimelineClient({
             }}
             position="right"
             dateClassName="text-black"
-            iconStyle={{ background: 'green', color: '#fff' }}
+            iconStyle={{
+              background: colorsProgress[item.ranking.note],
+              color: '#fff',
+            }}
             icon={iconProgress[item.ranking.note]}
           >
             <div className="flex gap-4 justify-between w-full">
@@ -102,10 +111,7 @@ export function TimelineClient({
               </div>
               <div className="flex flex-col">
                 <span>Atualizado em</span>
-                <span className="text-xl font-bold">
-                  {formattedDate}
-                  {/* {format(date, 'dd/MM/yyyy', { locale: ptBR })} */}
-                </span>
+                <span className="text-xl font-bold">{formattedDate}</span>
               </div>
             </div>
           </VerticalTimelineElement>

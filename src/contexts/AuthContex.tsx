@@ -90,13 +90,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const { user_id, user_email, expiry_timestamp, user_name, token } =
         response.data.payload
 
+      const timestampFromBackend = expiry_timestamp
+      const expiryDateInMillis = timestampFromBackend * 1000 // Converta para milissegundos
+      const currentDateInMillis = Date.now()
+      const dateExpire = Math.floor(
+        (expiryDateInMillis - currentDateInMillis) / 1000,
+      ) // Diferença em segundos
+
       setCookie(null, 'engsol.data', JSON.stringify(response.data.payload), {
-        maxAge: new Date(expiry_timestamp), // 1 dia
+        maxAge: dateExpire, // 1 dia
         path: '/',
       })
 
       setCookie(null, 'engsol.token', token, {
-        maxAge: new Date(expiry_timestamp), // 1 dia
+        maxAge: dateExpire, // 1 dia
         path: '/',
       })
 
@@ -108,15 +115,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
         token,
       })
 
+      if (parseCookies()['engsol.token']) {
+        toast.success('Login efetuado')
+        router.push('/admin/dashboard')
+      }
+
       // api.defaults.headers.Authorization = `Bearer ${token}`
-      toast.success('Login efetuado')
-      router.push('/admin/dashboard')
       return true
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       toast.error('Usuário ou senha inválidos')
-      console.log(err.response.data.error)
       return false
     }
   }

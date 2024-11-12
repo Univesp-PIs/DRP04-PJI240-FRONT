@@ -74,7 +74,7 @@ export const DraggableItemComponent: FC<DraggableProps> = ({
                 value={status.id}
                 className="font-bold"
                 key={status.id}
-                selected={status.id === step.ranking.condition.id}
+                selected={status.id === step.ranking.condition?.id}
               >
                 {status.name}
               </option>

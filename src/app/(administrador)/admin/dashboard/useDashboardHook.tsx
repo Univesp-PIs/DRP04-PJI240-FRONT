@@ -4,6 +4,7 @@ import { useDeleteProject } from '@/hooks/projects/deleteProject'
 import { useListProjects } from '@/hooks/projects/listProjects'
 import { useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa6'
 
 export function useDashboardHook() {
@@ -15,6 +16,29 @@ export function useDashboardHook() {
       | keyof IResponseListProjects['client']
     direction: 'ascending' | 'descending' | null
   } | null>(null)
+
+  const [isCopied, setIsCopied] = useState({
+    id: 0,
+    status: false,
+    link: '',
+  })
+
+  function handleCopy(id: number, value: string) {
+    navigator.clipboard.writeText(value)
+    setIsCopied({
+      id,
+      status: true,
+      link: value,
+    })
+    toast.success('Chave copiada!')
+    setTimeout(() => {
+      setIsCopied({
+        id: 0,
+        status: false,
+        link: '',
+      })
+    }, 2000)
+  }
 
   const {
     data: dataListProjects,
@@ -114,6 +138,7 @@ export function useDashboardHook() {
   return {
     search,
     handleSearch,
+    handleCopy,
     requestSort,
     getSortIcon,
     refetchListProjects,
@@ -125,5 +150,6 @@ export function useDashboardHook() {
     errorListProjects,
     router,
     sortedProjects,
+    isCopied,
   }
 }

@@ -144,7 +144,7 @@ export default function CriarProjeto() {
   }
 
   return (
-    <section className="w-full flex justify-center items-center min-h-[calc(100vh-95.83px)]">
+    <section className="w-full flex justify-center items-center">
       <div className="w-full max-w-screen-xl px-4 xl:px-0 py-4 lg:py-20 flex justify-center">
         <form
           className="w-full flex flex-col gap-16 items-center"

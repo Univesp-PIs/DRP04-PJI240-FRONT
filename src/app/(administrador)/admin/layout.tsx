@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Header } from '@/components/Header'
 import { AdminContextProvider } from '@/contexts/AdminContext'
-import { AuthProvider } from '@/contexts/AuthContex'
 
 export const metadata: Metadata = {
   title: 'EngSol - Admin',
@@ -15,10 +14,8 @@ export default function RootLayout({
 }>) {
   return (
     <AdminContextProvider>
-      <AuthProvider>
-        <Header />
-        {children}
-      </AuthProvider>
+      <Header />
+      {children}
     </AdminContextProvider>
   )
 }

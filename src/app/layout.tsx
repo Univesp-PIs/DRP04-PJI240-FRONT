@@ -7,6 +7,7 @@ import '@szhsin/react-menu/dist/transitions/slide.css'
 import { Toaster } from 'react-hot-toast'
 import { NetworkStatusNotifier } from '@/utils/networkStatusNotifier'
 import { ProviderQueryClient } from '@/contexts/QueriesContext'
+import { AuthProvider } from '@/contexts/AuthContex'
 
 const roboto = Roboto({
   weight: ['400', '500', '700', '900'],
@@ -26,7 +27,9 @@ export default function RootLayout({
       >
         <NetworkStatusNotifier />
         <Toaster position="bottom-right" reverseOrder={false} />
-        <ProviderQueryClient>{children}</ProviderQueryClient>
+        <ProviderQueryClient>
+          <AuthProvider>{children}</AuthProvider>
+        </ProviderQueryClient>
       </body>
     </html>
   )

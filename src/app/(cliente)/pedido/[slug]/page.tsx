@@ -32,8 +32,12 @@ export default function PedidoStatus({ params }: { params: { slug: string } }) {
           <ErrorOrder />
         ) : (
           <>
-            <h3 className="w-full bg-primary text-secondary font-medium text-xl p-2 text-center rounded-md">
-              Andamento do Pedido #{dataProject?.project.name}
+            <h3 className="w-full bg-primary text-secondary font-medium text-2xl p-2 text-center rounded-md">
+              <span className="text-lg">
+                Cliente: {dataProject?.client.name}
+              </span>
+              <br />
+              Andamento do Pedido: {dataProject?.project.name}
             </h3>
             <TimelineClient data={dataProject} />
           </>

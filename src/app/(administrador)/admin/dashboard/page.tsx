@@ -4,6 +4,8 @@ import { Button } from '@/components/Button'
 import { ModalGeneric } from '@/components/Modal'
 import { HiOutlineRefresh } from 'react-icons/hi'
 import { useDashboardHook } from './useDashboardHook'
+import toast from 'react-hot-toast'
+import { MdOutlineCopyAll } from 'react-icons/md'
 
 export default function Dashboard() {
   const {
@@ -11,7 +13,7 @@ export default function Dashboard() {
     handleDeleteProject,
     getSortIcon,
     refetchListProjects,
-    requestSort,
+    // requestSort,
     search,
     router,
     isFetchingListProjects,
@@ -20,10 +22,12 @@ export default function Dashboard() {
     errorListProjects,
     sortedProjects,
     variablesDeleteProject,
+    handleCopy,
+    isCopied,
   } = useDashboardHook()
 
   return (
-    <section className="w-full flex justify-center min-h-[calc(100vh-95.83px)]">
+    <section className="w-full flex justify-center">
       <div className="w-full max-w-screen-xl flex-col px-4 xl:px-0 py-4 lg:py-20 flex gap-4">
         <div className="flex w-full justify-end items-center gap-8">
           <HiOutlineRefresh
@@ -46,31 +50,31 @@ export default function Dashboard() {
             <thead>
               <tr className="bg-[#D9D9D9]">
                 <th
-                  onClick={() => requestSort('name')}
+                  // onClick={() => requestSort('name')}
                   className="py-2 px-4 text-left cursor-pointer"
                 >
-                  Projetos {getSortIcon('name')}
+                  Projeto {getSortIcon('name')}
                 </th>
                 <th
-                  onClick={() => requestSort('name')}
+                  // onClick={() => requestSort('name')}
                   className="py-2 px-4 text-left cursor-pointer"
                 >
                   Cliente {getSortIcon('name')}
                 </th>
                 <th
-                  onClick={() => requestSort('email')}
+                  // onClick={() => requestSort('email')}
                   className="py-2 px-4 text-left cursor-pointer"
                 >
                   Email {getSortIcon('email')}
                 </th>
                 <th
-                  onClick={() => requestSort('email')}
+                  // onClick={() => requestSort('email')}
                   className="py-2 px-4 text-left cursor-pointer"
                 >
                   Etapa {getSortIcon('email')}
                 </th>
                 <th
-                  onClick={() => requestSort('key')}
+                  // onClick={() => requestSort('key')}
                   className="py-2 px-4 text-left cursor-pointer"
                 >
                   Chave de Acesso {getSortIcon('key')}
@@ -107,9 +111,36 @@ export default function Dashboard() {
                     <td className="py-2 px-4">
                       {project?.timeline[0]?.ranking.condition.name}
                     </td>
-                    <td className="py-2 px-4">{project?.project.key}</td>
+                    <td className="py-2 px-4 gap-4">
+                      {project?.project.key}
+                      {isCopied.status && isCopied.id === project.project.id ? (
+                        <span className="block text-green-600 font-medium ">
+                          Copiada!
+                        </span>
+                      ) : (
+                        <MdOutlineCopyAll
+                          size={25}
+                          title="Copiar chave de acesso"
+                          className="cursor-pointer"
+                          onClick={() =>
+                            project.project.key
+                              ? handleCopy(
+                                  project.project.id,
+                                  project.project.key,
+                                )
+                              : toast.error('Chave de acesso não encontrada')
+                          }
+                        />
+                      )}
+                    </td>
                     <td className="py-2 px-4 flex flex-wrap gap-4">
-                      <Button title="Enviar Email" />
+                      {/* <Button title="Enviar Email" /> */}
+                      <Button
+                        title="Visualizar"
+                        onClick={() =>
+                          router.push(`/pedido/${project.project.key}`)
+                        }
+                      />
                       <Button
                         title="Editar"
                         onClick={() =>

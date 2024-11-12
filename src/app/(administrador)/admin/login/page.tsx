@@ -68,11 +68,11 @@ export default function Login() {
     // Incrementa a chave do reCAPTCHA para recriá-lo
     setRecaptchaKey(recaptchaKey + 1)
 
-    reset()
 
     setIsSubmitting(false)
 
     if (fnSignIn) {
+      reset()
       router.push('/admin/dashboard')
     }
   }

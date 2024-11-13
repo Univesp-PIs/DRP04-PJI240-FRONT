@@ -9,7 +9,7 @@ import { ModalGeneric } from '@/components/Modal'
 import { useListStatus } from '@/hooks/status/listStatus'
 import { IResponseGetProject } from '@/@types/project'
 import { DraggableItemComponent } from './stepItem'
-import { addDays, format } from 'date-fns'
+import { format } from 'date-fns'
 import { formatedProject, validateProject } from '../utils'
 import { useCreateProject } from '@/hooks/projects/createProject'
 import { ptBR } from 'date-fns/locale'
@@ -37,7 +37,7 @@ export default function CriarProjeto() {
         ranking: {
           id: 0,
           rank: '1',
-          last_update: format(addDays(new Date(), 1), 'yyyy-MM-dd', {
+          last_update: format(new Date(), 'yyyy-MM-dd', {
             locale: ptBR,
           }),
           note: 'waiting',
@@ -50,6 +50,8 @@ export default function CriarProjeto() {
       },
     ],
   })
+
+  console.log('dataApiProject', dataApiProject)
 
   useEffect(() => {
     setTitleHeader('Criar projeto')
@@ -84,17 +86,17 @@ export default function CriarProjeto() {
 
   const addStep = () => {
     const newStep = {
-      condition: {
-        id: 0,
-        name: '',
-      },
       ranking: {
         id: 0,
         rank: (dataApiProject?.timeline.length
           ? dataApiProject.timeline.length + 1
           : 0
         ).toString(),
-        last_update: format(addDays(new Date(), 1), 'yyyy-MM-dd', {
+        condition: {
+          id: 0,
+          name: '',
+        },
+        last_update: format(new Date(), 'yyyy-MM-dd', {
           locale: ptBR,
         }),
         note: 'waiting',
@@ -157,6 +159,7 @@ export default function CriarProjeto() {
                 htmlFor="project_name"
               >
                 Nome do projeto
+                <span className="text-red-500 font-bold"> *</span>
               </label>
               <input
                 type="text"
@@ -182,6 +185,7 @@ export default function CriarProjeto() {
                   htmlFor="client_name"
                 >
                   Nome do cliente
+                  <span className="text-red-500 font-bold"> *</span>
                 </label>
                 <input
                   type="text"
@@ -227,9 +231,13 @@ export default function CriarProjeto() {
             </div>
           </div>
           <ul className="characters flex gap-8 md:gap-4 flex-wrap flex-row items-start w-full">
-            <div className="hidden lg:flex flex-col gap-6 items-center md:items-start w-fit">
-              <h3 className="text-2xl font-bold">Etapa</h3>
-              <h3 className="text-2xl font-bold">Status</h3>
+            <div className="hidden md:flex flex-col gap-6 items-center md:items-start w-fit">
+              <h3 className="text-2xl font-bold">
+                Etapa<span className="text-red-500 font-bold"> *</span>
+              </h3>
+              <h3 className="text-2xl font-bold">
+                Status<span className="text-red-500 font-bold"> *</span>
+              </h3>
               <h3 className="text-2xl font-bold">Data</h3>
               <h3 className="text-2xl font-bold">Descrição</h3>
             </div>

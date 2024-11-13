@@ -1,7 +1,7 @@
 import { mockProgress } from '@/mocks/mockProgress'
-import { format, isValid, parseISO } from 'date-fns'
+import { addDays, format, isValid, parseISO } from 'date-fns'
 import { CgCloseO } from 'react-icons/cg'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { IResponseListStatus } from '@/@types/status'
 import { IResponseGetProject, ITimeline } from '@/@types/project'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6'
@@ -29,16 +29,24 @@ export const DraggableItemComponent: FC<DraggableProps> = ({
 }) => {
   // Verificação e formatação inicial de `last_update`
   const initialDate = isValid(new Date(step.ranking.last_update))
-    ? format(new Date(step.ranking.last_update), 'yyyy-MM-dd')
+    ? format(addDays(new Date(step.ranking.last_update), 1), 'yyyy-MM-dd')
     : ''
 
   const [date, setDate] = useState(initialDate)
 
+  useEffect(() => {
+    setDate(initialDate)
+  }, [initialDate])
+
   return (
     <li className="flex flex-row md:flex-col items-start md:items-center gap-4">
       <div className="flex-col gap-8 justify-normal h-full w-fit flex lg:hidden text-black">
-        <h3 className="text-xl font-bold">Etapa</h3>
-        <h3 className="text-xl font-bold">Status</h3>
+        <h3 className="text-xl font-bold">
+          Etapa<span className="text-red-500 font-bold"> *</span>
+        </h3>
+        <h3 className="text-xl font-bold">
+          Status<span className="text-red-500 font-bold"> *</span>
+        </h3>
         <h3 className="text-xl font-bold">Data</h3>
         <h3 className="text-xl font-bold">Descrição da etapa</h3>
       </div>

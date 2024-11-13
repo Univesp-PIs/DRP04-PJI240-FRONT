@@ -61,12 +61,12 @@ export function Header() {
                 style={{ animationDelay: '0.1s' }}
               />
             ) : (
-              <h2 className="text-xl md:text-2xl font-semibold text-secondary flex items-center">
+              <h2 className="flex text-sm md:text-2xl font-semibold text-secondary items-center text-right md:text-left">
                 {titleHeader}
               </h2>
             )}
             {isAuthenticated && (
-              <>
+              <div className="flex items-center gap-2">
                 <MenuAdmin />
                 <button
                   type="button"
@@ -76,7 +76,7 @@ export function Header() {
                 >
                   <LuLogOut size={30} />
                 </button>
-              </>
+              </div>
             )}
           </div>
         ) : (

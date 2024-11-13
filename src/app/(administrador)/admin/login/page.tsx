@@ -85,7 +85,7 @@ export default function Login() {
           onSubmit={handleSubmit(handleLogin)}
         >
           <div className="w-full flex flex-col gap-4 max-w-screen-md">
-            <div className="text-center md:text-left flex flex-col gap-2">
+            <div className="flex flex-col gap-2">
               <label
                 className="cursor-pointer font-bold text-xl"
                 htmlFor="email"
@@ -105,7 +105,7 @@ export default function Login() {
                 </p>
               )}
             </div>
-            <div className="text-center md:text-left flex flex-col gap-2">
+            <div className="flex flex-col gap-2">
               <label
                 className="cursor-pointer font-bold text-xl"
                 htmlFor="password"

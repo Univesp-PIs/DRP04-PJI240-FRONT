@@ -109,7 +109,9 @@ export default function Dashboard() {
                     <td className="py-2 px-4">{project.client.name}</td>
                     <td className="py-2 px-4">{project.client.email}</td>
                     <td className="py-2 px-4">
-                      {project?.timeline[0]?.ranking.condition.name}
+                      {project?.timeline.find(
+                        (step) => step.ranking.note === 'in progress',
+                      )?.ranking.condition.name || 'Não iniciado'}
                     </td>
                     <td className="py-2 px-4 gap-4">
                       {project?.project.key}

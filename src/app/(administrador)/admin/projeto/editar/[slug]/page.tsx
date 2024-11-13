@@ -15,6 +15,7 @@ import { format } from 'date-fns'
 import { formatedProject, validateProject } from '../../utils'
 import { useUpdateProject } from '@/hooks/projects/updateProject'
 import { useDeleteProject } from '@/hooks/projects/deleteProject'
+import { ptBR } from 'date-fns/locale'
 
 export default function EditarProjeto({
   params,
@@ -65,8 +66,13 @@ export default function EditarProjeto({
     }
 
     // Validações dos dados
-    validateProject(dataApiProject)
+    const validation = validateProject(dataApiProject)
+    if (validation) {
+      return
+    }
+
     const formattedData = formatedProject(dataApiProject)
+
     const formattedTimelineDeleted = timelineDeleted.map((step) => ({
       ...step,
       ranking: { ...step.ranking, rank: '0', delete: true },
@@ -104,17 +110,19 @@ export default function EditarProjeto({
 
   const addStep = () => {
     const newStep = {
-      condition: {
-        id: 0,
-        name: '',
-      },
       ranking: {
         id: 0,
         rank: (dataApiProject?.timeline.length
           ? dataApiProject.timeline.length + 1
           : 0
         ).toString(),
-        last_update: format(new Date(), 'yyyy-MM-dd'),
+        condition: {
+          id: 0,
+          name: '',
+        },
+        last_update: format(new Date(), 'yyyy-MM-dd', {
+          locale: ptBR,
+        }),
         note: 'waiting',
         description: '',
       },
@@ -177,6 +185,7 @@ export default function EditarProjeto({
                 htmlFor="project_name"
               >
                 Nome do projeto
+                <span className="text-red-500 font-bold"> *</span>
               </label>
               <input
                 type="text"
@@ -202,6 +211,7 @@ export default function EditarProjeto({
                   htmlFor="client_name"
                 >
                   Nome do cliente
+                  <span className="text-red-500 font-bold"> *</span>
                 </label>
                 <input
                   type="text"
@@ -248,8 +258,12 @@ export default function EditarProjeto({
           </div>
           <ul className="characters flex gap-8 md:gap-4 flex-wrap flex-row items-start w-full">
             <div className="hidden lg:flex flex-col gap-6 items-center md:items-start w-fit">
-              <h3 className="text-2xl font-bold">Etapa</h3>
-              <h3 className="text-2xl font-bold">Status</h3>
+              <h3 className="text-2xl font-bold">
+                Etapa<span className="text-red-500 font-bold"> *</span>
+              </h3>
+              <h3 className="text-2xl font-bold">
+                Status<span className="text-red-500 font-bold"> *</span>
+              </h3>
               <h3 className="text-2xl font-bold">Data</h3>
               <h3 className="text-2xl font-bold">Descrição</h3>
             </div>

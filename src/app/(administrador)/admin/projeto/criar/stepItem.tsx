@@ -1,10 +1,15 @@
 import { mockProgress } from '@/mocks/mockProgress'
-import { format, isValid, parseISO } from 'date-fns'
+import { addDays, format, isValid, parseISO } from 'date-fns'
 import { CgCloseO } from 'react-icons/cg'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { IResponseListStatus } from '@/@types/status'
 import { IResponseGetProject, ITimeline } from '@/@types/project'
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6'
+import {
+  FaArrowDown,
+  FaArrowLeft,
+  FaArrowRight,
+  FaArrowUp,
+} from 'react-icons/fa6'
 
 interface DraggableProps {
   step: IResponseGetProject['timeline'][0]
@@ -27,18 +32,25 @@ export const DraggableItemComponent: FC<DraggableProps> = ({
   dataApiProject,
   dataListStatus,
 }) => {
-  // Verificação e formatação inicial de `last_update`
   const initialDate = isValid(new Date(step.ranking.last_update))
-    ? format(new Date(step.ranking.last_update), 'yyyy-MM-dd')
+    ? format(addDays(new Date(step.ranking.last_update), 1), 'yyyy-MM-dd')
     : ''
 
   const [date, setDate] = useState(initialDate)
 
+  useEffect(() => {
+    setDate(initialDate)
+  }, [initialDate])
+
   return (
     <li className="flex flex-row md:flex-col items-start md:items-center gap-4">
-      <div className="flex-col gap-8 justify-normal h-full w-fit flex lg:hidden text-black">
-        <h3 className="text-xl font-bold">Etapa</h3>
-        <h3 className="text-xl font-bold">Status</h3>
+      <div className="flex-col gap-8 justify-normal h-full w-fit flex md:hidden text-black">
+        <h3 className="text-xl font-bold">
+          Etapa<span className="text-red-500 font-bold"> *</span>
+        </h3>
+        <h3 className="text-xl font-bold">
+          Status<span className="text-red-500 font-bold"> *</span>
+        </h3>
         <h3 className="text-xl font-bold">Data</h3>
         <h3 className="text-xl font-bold">Descrição da etapa</h3>
       </div>
@@ -181,7 +193,8 @@ export const DraggableItemComponent: FC<DraggableProps> = ({
                 disabled={index === 0}
                 className="hover:scale-110 duration-300"
               >
-                <FaArrowLeft size={25} />
+                <FaArrowLeft size={25} className="hidden md:block" />
+                <FaArrowUp size={25} className="block md:hidden" />
               </button>
             )}
             {index !== dataApiProject.timeline.length - 1 && (
@@ -190,7 +203,8 @@ export const DraggableItemComponent: FC<DraggableProps> = ({
                 onClick={moveRight}
                 className="hover:scale-110 duration-300"
               >
-                <FaArrowRight size={25} />
+                <FaArrowRight size={25} className="hidden md:block" />
+                <FaArrowDown size={25} className="block md:hidden" />
               </button>
             )}
           </div>

@@ -15,10 +15,12 @@ import { useCreateProject } from '@/hooks/projects/createProject'
 import { ptBR } from 'date-fns/locale'
 
 export default function CriarProjeto() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
 
-  const { mutateAsync: mutateCreateProject } = useCreateProject()
+  const {
+    mutateAsync: mutateCreateProject,
+    isPending: isPendingCreateProject,
+  } = useCreateProject()
   const { data: dataListStatus } = useListStatus()
 
   const { setTitleHeader } = useContext(AdminContext)
@@ -51,8 +53,6 @@ export default function CriarProjeto() {
     ],
   })
 
-  console.log('dataApiProject', dataApiProject)
-
   useEffect(() => {
     setTitleHeader('Criar projeto')
   }, [setTitleHeader, dataApiProject?.project.name])
@@ -60,19 +60,20 @@ export default function CriarProjeto() {
   async function handleSubmitContact(e: FormEvent) {
     e.preventDefault()
 
-    setIsSubmitting(true)
     if (!dataApiProject) {
       return
     }
 
     // Validações dos dados
-    validateProject(dataApiProject)
+    const validation = validateProject(dataApiProject)
+    if (validation) {
+      return
+    }
+
     const formattedData = formatedProject(dataApiProject)
 
     // Cria o projeto
     await mutateCreateProject(formattedData)
-
-    setIsSubmitting(false)
   }
 
   const removeStep = (index: number) => {
@@ -271,7 +272,7 @@ export default function CriarProjeto() {
             <Button
               type="submit"
               variant="primary"
-              isLoading={isSubmitting}
+              isLoading={isPendingCreateProject}
               title="Salvar"
             />
           </div>

@@ -85,25 +85,27 @@ export function useDashboardHook() {
       )
     : []
 
-  const sortedProjects = [...filteredProjects].sort((a, b) => {
-    if (sortConfig !== null) {
-      const aKey =
-        sortConfig.key === 'name' || sortConfig.key === 'key'
-          ? a.project[sortConfig.key]
-          : a.client[sortConfig.key as keyof IResponseListProjects['client']]
-      const bKey =
-        sortConfig.key === 'name' || sortConfig.key === 'key'
-          ? b.project[sortConfig.key]
-          : b.client[sortConfig.key as keyof IResponseListProjects['client']]
-      if (aKey && bKey && aKey < bKey) {
-        return sortConfig.direction === 'ascending' ? -1 : 1
-      }
-      if (aKey && bKey && aKey > bKey) {
-        return sortConfig.direction === 'ascending' ? 1 : -1
-      }
-    }
-    return 0
-  })
+  // const sortedProjects = [...filteredProjects].sort((a, b) => {
+  //   if (sortConfig !== null) {
+  //     const aKey =
+  //       sortConfig.key === 'name' || sortConfig.key === 'key'
+  //         ? a.project[sortConfig.key]
+  //         : a.client[sortConfig.key as keyof IResponseListProjects['client']]
+  //     const bKey =
+  //       sortConfig.key === 'name' || sortConfig.key === 'key'
+  //         ? b.project[sortConfig.key]
+  //         : b.client[sortConfig.key as keyof IResponseListProjects['client']]
+  //     if (aKey && bKey && aKey < bKey) {
+  //       return sortConfig.direction === 'ascending' ? -1 : 1
+  //     }
+  //     if (aKey && bKey && aKey > bKey) {
+  //       return sortConfig.direction === 'ascending' ? 1 : -1
+  //     }
+  //   }
+  //   return 0
+  // })
+
+  const sortedProjects = [...filteredProjects]
 
   const requestSort = (
     key:
